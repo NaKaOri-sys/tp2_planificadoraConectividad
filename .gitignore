@@ -1,24 +1,32 @@
-# Compiled class file
+# --- JAVA & COMPILACION ---
 *.class
-
-# Log file
 *.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+# Ignorar la carpeta donde Eclipse guarda los .class compilados
+bin/
+build/
+target/
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# --- ECLIPSE ---
+# Ignorar configuraciones específicas del usuario pero mantener las del proyecto
+.metadata/
+.recommenders/
+remote.properties
+*.userlibraries
+*.launch
+
+# Si querés que cada uno configure sus propias librerías/path, descomentá estas 3:
+# .settings/
+# .project
+# .classpath
+
+# --- SISTEMA OPERATIVO ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- TEMPORALES ---
+*.tmp
+*.bak
+*.swp
