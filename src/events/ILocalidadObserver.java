@@ -1,5 +1,7 @@
 package events;
 
+import java.util.Map;
+
 import model.Localidad;
 
 public interface ILocalidadObserver {
@@ -11,24 +13,18 @@ public interface ILocalidadObserver {
 	void onError(String errorMessage);
 
 	/**
-	 * Método que se llama cuando se recibe una actualización de la localidad.
-	 * 
-	 * @param localidad La nueva localidad recibida.
-	 */
-	void onLocalidadUpdate(Localidad localidad);
-
-	/**
 	 * Método que se llama cuando se crea una nueva localidad.
 	 * 
-	 * @param localidad La nueva localidad creada.
+	 * @param localidades Un mapa de todas las localidades después de la creación.
 	 */
-	void onLocalidadCreated(Localidad localidad);
+	void onLocalidadCreated(Map<String, Localidad> localidades);
 
 	/**
 	 * Método que se llama cuando se elimina una localidad.
 	 * 
-	 * @param localidad La localidad que ha sido eliminada.
+	 * @param localidad Un mapa de las localidades restantes después de la
+	 *                  eliminación.
 	 */
-	void onLocalidadDeleted(Localidad localidad);
+	void onLocalidadDeleted(Map<String, Localidad> localidades);
 
 }
