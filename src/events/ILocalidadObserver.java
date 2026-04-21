@@ -3,6 +3,7 @@ package events;
 import java.util.Map;
 
 import model.Localidad;
+import model.dtos.LocalidadDto;
 
 public interface ILocalidadObserver {
 	/**
@@ -26,5 +27,4 @@ public interface ILocalidadObserver {
 	 *                  eliminación.
 	 */
 	void onLocalidadDeleted(Map<String, Localidad> localidades);
-
 }
