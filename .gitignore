@@ -8,6 +8,8 @@ bin/
 build/
 target/
 
+localidades.json
+
 # --- ECLIPSE ---
 # Ignorar configuraciones específicas del usuario pero mantener las del proyecto
 .metadata/

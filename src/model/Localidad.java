@@ -1,6 +1,12 @@
 package model;
 
-public class Localidad {
+import java.io.Serializable;
+
+public class Localidad implements Serializable {
+	/** 
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String nombre;
 	private String provincia;
 	private double latitud;
