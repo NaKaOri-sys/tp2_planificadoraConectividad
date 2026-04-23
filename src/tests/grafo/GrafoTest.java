@@ -37,7 +37,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testAgregarConexionBidireccional() {
-		Conexion conexion = new Conexion(SanMiguel, ManuelAlberti);
+		Conexion conexion = new Conexion(SanMiguel, ManuelAlberti, 10.0);
 		
 		grafo.agregarConexion(conexion);
 		
@@ -50,7 +50,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testAgregarConexionConLocalidadesNoExistentes() {
-		Conexion conexion = new Conexion(SanMiguel, Polvorines);
+		Conexion conexion = new Conexion(SanMiguel, Polvorines, 15.0);
 		
 		grafo.agregarConexion(conexion);
 		
@@ -60,9 +60,9 @@ public class GrafoTest {
 	
 	@Test
 	public void testEliminarLocalidadLimpiandoConexionesVecinos() {
-		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti));
-		grafo.agregarConexion(new Conexion(SanMiguel, Polvorines));
-		grafo.agregarConexion(new Conexion(ManuelAlberti, Polvorines));
+		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
+		grafo.agregarConexion(new Conexion(SanMiguel, Polvorines, 15.0));
+		grafo.agregarConexion(new Conexion(ManuelAlberti, Polvorines, 5.0));
 		
 		grafo.eliminarLocalidad(Polvorines);
 		
