@@ -64,8 +64,8 @@ public class Grafo {
 		return mapaDeRedes.get(localidad);
 	}
 
-	public Set<Localidad> getLocalidades() {
-		return mapaDeRedes.keySet();
+	public List<Localidad> getLocalidades() {
+		return new ArrayList<>(mapaDeRedes.keySet());
 	}
 
 	public List<Conexion> getTodasLasConexiones() {
@@ -78,5 +78,13 @@ public class Grafo {
 
 	public boolean existeLocalidad(Localidad localidad) {
 		return mapaDeRedes.containsKey(localidad);
+	}
+	
+	public double calcularCostoTotal() {
+		double costoTotal = 0.0;
+		for (Conexion conexion : this.getTodasLasConexiones()) {
+			costoTotal += conexion.getCosto();
+		}
+		return costoTotal;
 	}
 }

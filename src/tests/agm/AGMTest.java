@@ -48,20 +48,11 @@ public class AGMTest {
 		Grafo grafo = new Grafo();
 		grafo.agregarLocalidad(SanMiguel);
 		grafo.agregarLocalidad(ManuelAlberti);
-		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
-		grafo.agregarLocalidad(new Localidad("Otra Localidad", "Buenos Aires", -34.0, -58.0));
-		Grafo agm = new AGM(grafo).generarAGM();
-		assertNotNull(agm);
-	}
-	
-	@Test
-	public void testAGMConGrafoValido() {
-		Grafo grafo = new Grafo();
-		grafo.agregarLocalidad(SanMiguel);
-		grafo.agregarLocalidad(ManuelAlberti);
+		grafo.agregarLocalidad(JoseCPaz);
 		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
 		Grafo agm = new AGM(grafo).generarAGM();
-		assertNotNull(agm);
+		
+		assertEquals(10, agm.calcularCostoTotal(), 0.001);
 	}
 	
 	@Test
@@ -74,42 +65,10 @@ public class AGMTest {
 		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
 		grafo.agregarConexion(new Conexion(ManuelAlberti, joseCPaz, 5.0));
 		grafo.agregarConexion(new Conexion(SanMiguel, joseCPaz, 15.0));
-		Grafo agm = new AGM(grafo).generarAGM();
-		assertNotNull(agm);
-	}
-	
-	@Test
-	public void testAGMConGrafoConCicloYConexionesAdicionales() {
-		Grafo grafo = new Grafo();
-		Localidad joseCPaz = new Localidad("Jose C. Paz", "Buenos Aires", -34.51, -58.76);
-		Localidad otraLocalidad = new Localidad("Otra Localidad", "Buenos Aires", -34.0, -58.0);
-		grafo.agregarLocalidad(SanMiguel);
-		grafo.agregarLocalidad(ManuelAlberti);
-		grafo.agregarLocalidad(joseCPaz);
-		grafo.agregarLocalidad(otraLocalidad);
-		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
-		grafo.agregarConexion(new Conexion(ManuelAlberti, joseCPaz, 5.0));
-		grafo.agregarConexion(new Conexion(SanMiguel, joseCPaz, 15.0));
-		grafo.agregarConexion(new Conexion(SanMiguel, otraLocalidad, 20.0));
-		Grafo agm = new AGM(grafo).generarAGM();
-		assertNotNull(agm);
-	}
-	
-	@Test
-	public void conteoDeAristasEnAGM() {
-		Grafo grafo = new Grafo();
-		grafo.agregarLocalidad(SanMiguel);
-		grafo.agregarLocalidad(ManuelAlberti);
-		grafo.agregarLocalidad(JoseCPaz);
-		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
-		grafo.agregarConexion(new Conexion(ManuelAlberti, JoseCPaz, 5.0));
-		grafo.agregarConexion(new Conexion(SanMiguel, JoseCPaz, 15.0));
 		
-		AGM agm = new AGM(grafo);
-		Grafo grafoAGM = agm.generarAGM();
-		
-		int cantidadDeConexionesEnAGM = grafoAGM.getTodasLasConexiones().size();
-		int cantidadDeLocalidadesEnAGM = grafoAGM.getLocalidades().size();
+		Grafo agm = new AGM(grafo).generarAGM();
+		int cantidadDeConexionesEnAGM = agm.getTodasLasConexiones().size();
+		int cantidadDeLocalidadesEnAGM = agm.getLocalidades().size();
 		
 		assertEquals(cantidadDeLocalidadesEnAGM - 1, cantidadDeConexionesEnAGM);
 	}
@@ -132,8 +91,8 @@ public class AGMTest {
 		AGM agm = new AGM(grafo);
 		Grafo grafoAGM = agm.generarAGM();
 		
-		double costoTotalAGM = agm.calcularCostoTotalAGM(grafoAGM);
-		double costoEsperado = 10.0 + 5.0 + 20.0; // Conexiones
+		double costoTotalAGM = grafoAGM.calcularCostoTotal();
+		double costoEsperado = 10.0 + 5.0 + 20.0;
 		
 		assertEquals(costoEsperado, costoTotalAGM, 0.001);
 	}

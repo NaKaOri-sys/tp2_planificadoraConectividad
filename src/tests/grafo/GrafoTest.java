@@ -22,6 +22,16 @@ public class GrafoTest {
 		this.Polvorines = new Localidad("Polvorines", "Buenos Aires", -34.50316 , -58.70596);
 	}
 	
+	@Test(expected = IllegalArgumentException.class)
+	public void testEliminarLocalidadNoExistente() {
+		grafo.eliminarLocalidad(SanMiguel);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testObtenerConexionesDeLocalidadInexistente() {
+		grafo.getConexiones(SanMiguel);
+	}
+	
 	@Test
 	public void testAgregarLocalidadNueva() {
 		grafo.agregarLocalidad(SanMiguel);
@@ -80,10 +90,6 @@ public class GrafoTest {
 		assertFalse(grafo.getLocalidades().contains(SanMiguel));
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void testEliminarLocalidadNoExistente() {
-		grafo.eliminarLocalidad(SanMiguel);
-	}
 	
 	@Test
 	public void testObtenerConexionesDeLocalidadSinConexiones() {
@@ -91,8 +97,4 @@ public class GrafoTest {
 		assertTrue(grafo.getConexiones(ManuelAlberti).isEmpty());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void testObtenerConexionesDeLocalidadInexistente() {
-		grafo.getConexiones(SanMiguel);
-	}
 }

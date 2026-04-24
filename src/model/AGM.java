@@ -9,12 +9,12 @@ public class AGM {
 		validateGrafo(g);
 		this.grafo = g;
 	}
-	
+
 	private void validateGrafo(Grafo g) {
 		if (g == null || g.getLocalidades().size() == 0) {
 			throw new IllegalArgumentException("Error: El grafo no puede estar vacío.");
 		}
-		
+
 		if (g.getTodasLasConexiones().isEmpty()) {
 			throw new IllegalArgumentException("Error: El grafo debe tener al menos una conexión.");
 		}
@@ -30,12 +30,12 @@ public class AGM {
 		while (visitados.size() < grafo.getLocalidades().size()) {
 			Conexion conexionMinima = buscarConexionMinima(grafo, visitados);
 			if (conexionMinima == null) {
-				return agm; // No hay más conexiones disponibles, el grafo no es conexo y retorno el AGM obtenido hasta ahora
+				return agm; // No hay más conexiones disponibles, el grafo no es conexo y retorno el AGM
+							// obtenido hasta ahora
 			}
-			Localidad destino = visitados.contains(conexionMinima.getOrigen()) 
-					? conexionMinima.getDestino() 
-							: conexionMinima.getOrigen();
-			
+			Localidad destino = visitados.contains(conexionMinima.getOrigen()) ? conexionMinima.getDestino()
+					: conexionMinima.getOrigen();
+
 			agm.agregarLocalidad(destino);
 			agm.agregarConexion(conexionMinima);
 			visitados.add(destino);
@@ -59,15 +59,5 @@ public class AGM {
 			}
 		}
 		return minima;
-	}
-	
-	public double calcularCostoTotalAGM(Grafo agm) {
-		double costoTotal = 0.0;
-		for (Localidad localidad : agm.getLocalidades()) {
-			for (Conexion conexion : agm.getConexiones(localidad)) {
-				costoTotal += conexion.getCosto();
-			}
-		}
-		return costoTotal / 2;
 	}
 }
