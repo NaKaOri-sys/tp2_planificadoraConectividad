@@ -22,6 +22,16 @@ public class GrafoTest {
 		this.Polvorines = new Localidad("Polvorines", "Buenos Aires", -34.50316 , -58.70596);
 	}
 	
+	@Test(expected = IllegalArgumentException.class)
+	public void testEliminarLocalidadNoExistente() {
+		grafo.eliminarLocalidad(SanMiguel);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testObtenerConexionesDeLocalidadInexistente() {
+		grafo.getConexiones(SanMiguel);
+	}
+	
 	@Test
 	public void testAgregarLocalidadNueva() {
 		grafo.agregarLocalidad(SanMiguel);
@@ -37,7 +47,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testAgregarConexionBidireccional() {
-		Conexion conexion = new Conexion(SanMiguel, ManuelAlberti);
+		Conexion conexion = new Conexion(SanMiguel, ManuelAlberti, 10.0);
 		
 		grafo.agregarConexion(conexion);
 		
@@ -50,7 +60,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testAgregarConexionConLocalidadesNoExistentes() {
-		Conexion conexion = new Conexion(SanMiguel, Polvorines);
+		Conexion conexion = new Conexion(SanMiguel, Polvorines, 15.0);
 		
 		grafo.agregarConexion(conexion);
 		
@@ -60,9 +70,9 @@ public class GrafoTest {
 	
 	@Test
 	public void testEliminarLocalidadLimpiandoConexionesVecinos() {
-		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti));
-		grafo.agregarConexion(new Conexion(SanMiguel, Polvorines));
-		grafo.agregarConexion(new Conexion(ManuelAlberti, Polvorines));
+		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
+		grafo.agregarConexion(new Conexion(SanMiguel, Polvorines, 15.0));
+		grafo.agregarConexion(new Conexion(ManuelAlberti, Polvorines, 5.0));
 		
 		grafo.eliminarLocalidad(Polvorines);
 		
@@ -80,10 +90,6 @@ public class GrafoTest {
 		assertFalse(grafo.getLocalidades().contains(SanMiguel));
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void testEliminarLocalidadNoExistente() {
-		grafo.eliminarLocalidad(SanMiguel);
-	}
 	
 	@Test
 	public void testObtenerConexionesDeLocalidadSinConexiones() {
@@ -91,8 +97,4 @@ public class GrafoTest {
 		assertTrue(grafo.getConexiones(ManuelAlberti).isEmpty());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void testObtenerConexionesDeLocalidadInexistente() {
-		grafo.getConexiones(SanMiguel);
-	}
 }

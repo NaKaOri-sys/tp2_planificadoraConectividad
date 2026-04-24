@@ -18,22 +18,22 @@ public class ConexionTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testConexionConOrigenNulo() {
-		new Conexion(null, ManuelAlberti);
+		new Conexion(null, ManuelAlberti, 10.0);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testConexionConDestinoNulo() {
-		new Conexion(SanMiguel, null);
+		new Conexion(SanMiguel, null, 10.0);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testConexionConMismaLocalidad() {
-		new Conexion(SanMiguel, SanMiguel);
+		new Conexion(SanMiguel, SanMiguel, 10.0);
 	}
 	
 	@Test
 	public void testConexionValida() {
-		Conexion conexion = new Conexion(SanMiguel, ManuelAlberti);
+		Conexion conexion = new Conexion(SanMiguel, ManuelAlberti, 10.0);
 		assertEquals(SanMiguel, conexion.getOrigen());
 		assertEquals(ManuelAlberti, conexion.getDestino());
 	}
