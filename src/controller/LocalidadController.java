@@ -2,7 +2,6 @@ package controller;
 
 import java.util.Map;
 
-import dao.LocalidadDao;
 import events.ILocalidadListener;
 import events.ILocalidadObserver;
 import model.Localidad;
@@ -41,11 +40,11 @@ public class LocalidadController implements ILocalidadListener, ILocalidadObserv
 
 	@Override
 	public void onLocalidadCreated(Map<String, Localidad> localidades) {
-		LocalidadDao.generarJsonLocalidad("localidades.json", localidades);
+		this.localidadModel.saveToJson();
 	}
 
 	@Override
 	public void onLocalidadDeleted(Map<String, Localidad> localidades) {
-		LocalidadDao.generarJsonLocalidad("localidades.json", localidades);
+		this.localidadModel.saveToJson();
 	}
 }

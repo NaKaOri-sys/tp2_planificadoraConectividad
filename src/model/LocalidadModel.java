@@ -40,10 +40,19 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 	}
 
 	public LinkedHashMap<String, Localidad> loadFromJson() {
-		LinkedHashMap<String, Localidad> localidades = LocalidadDao.cargarDesdeJson("localidades.json");
+		LinkedHashMap<String, Localidad> localidades = LocalidadDao.cargarDesdeJson(LocalidadDao.FILE_PATH);
 		if (localidades != null) {
 			return localidades;
 		}
 		return new LinkedHashMap<>();
+	}
+	
+	public void saveToJson() {
+		LocalidadDao.generarJsonLocalidad(LocalidadDao.FILE_PATH, this.localidades);
+	}
+	
+	public void deleteAllLocalidades() {
+		this.localidades.clear();
+		LocalidadDao.eliminarArchivoJson(LocalidadDao.FILE_PATH);
 	}
 }
