@@ -1,56 +1,61 @@
 package model;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import events.IMapaObserver;
+import model.dtos.ConfigurationDto;
 import util.Observable;
 
 public class MapaModel extends Observable<IMapaObserver> {
 	private double costoKm;
 	private double recargo;
 	private double costoDifProv;
-	private LinkedHashMap<String, Localidad> localidades;
+
 	public MapaModel() {
 		this.costoKm = 0.0;
 		this.recargo = 0.0;
 		this.costoDifProv = 0.0;
-		this.localidades = new LinkedHashMap<>();
+	}
+
+	public void setConfiguration(ConfigurationDto dto) {
+		this.costoKm = Double.parseDouble(dto.getCostoKm());
+		if (costoKm <= 0)
+			throw new IllegalArgumentException("El costo por KM debe ser un número mayor a 0.");
+		this.recargo = Double.parseDouble(dto.getRecargo());
+		if (recargo < 0)
+			throw new IllegalArgumentException("El recargo debe ser un número positivo.");
+		this.costoDifProv = Double.parseDouble(dto.getCostoDifProv());
+		if (costoDifProv < 0)
+			throw new IllegalArgumentException(
+					"El costo por ser de diferente provincia debe ser un número positivo.");
 	}
 
 	public double getCostoKm() {
 		return costoKm;
 	}
 
-	public void setCostoKm(double costoKm) {
-		this.costoKm = costoKm;
-		notifyObservers(observer -> observer.onCostoKmChanged(String.valueOf(costoKm)));
-	}
-
 	public double getRecargo() {
 		return recargo;
-	}
-
-	public void setRecargo(double recargo) {
-		this.recargo = recargo;
-		notifyObservers(observer -> observer.onRecargoChanged(String.valueOf(recargo)));
 	}
 
 	public double getCostoDifProv() {
 		return costoDifProv;
 	}
 
-	public void setCostoDifProv(double costoDifProv) {
-		this.costoDifProv = costoDifProv;
-		notifyObservers(observer -> observer.onCostoDifProvChanged(String.valueOf(costoDifProv)));
-	}
-	
-	public LinkedHashMap<String, Localidad> getLocalidades() {
-		return localidades;
-	}
-	
-	public void agregarLocalidad(Localidad localidad) {
-		this.localidades.put(localidad.getNombre(), localidad);
-		notifyObservers(observer -> observer.onLocalidadAgregada());
+	public void generarRed(ConfigurationDto dto, Map<String, Localidad> localidades) {
+		try {
+			if (localidades.size() < 2)
+				throw new IllegalArgumentException("Debe haber por lo menos 2 localidades cargadas.");
+			setConfiguration(dto);
+			GenerarRedModel red = new GenerarRedModel(costoKm, recargo, costoDifProv, localidades);
+			this.notifyObservers(o -> o.onRedCreated(red.generarRed()));
+		} catch (NumberFormatException e) {
+			notifyObservers(o -> o.onMapaError("Los campos de costos configurables deben ser números validos"));
+			return;
+		} catch (IllegalArgumentException e) {
+			notifyObservers(o -> o.onMapaError(e.getMessage()));
+			return;
+		}
 	}
 
 }

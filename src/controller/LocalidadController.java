@@ -33,8 +33,7 @@ public class LocalidadController implements ILocalidadListener, ILocalidadObserv
 			this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(), latitud,
 					longitud);
 		} catch (NumberFormatException e) {
-			this.localidadDialog.mostrarError(e.getMessage());
-			return;
+			this.localidadDialog.mostrarError("Latitud y longitud deben ser números válidos.");
 		}
 	}
 

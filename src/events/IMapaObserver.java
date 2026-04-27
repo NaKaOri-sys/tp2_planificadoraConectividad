@@ -1,8 +1,8 @@
 package events;
 
+import model.Grafo;
+
 public interface IMapaObserver {
-	void onLocalidadAgregada();
-	void onCostoKmChanged(String nuevoValor);
-	void onRecargoChanged(String nuevoValor);
-	void onCostoDifProvChanged(String nuevoValor);
+	void onRedCreated(Grafo grafo);
+	void onMapaError(String message);
 }

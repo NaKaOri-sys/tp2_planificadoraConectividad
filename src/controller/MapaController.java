@@ -1,18 +1,18 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import events.ILocalidadObserver;
 import events.IMapaListener;
 import events.IMapaObserver;
+import model.Grafo;
 import model.Localidad;
 import model.LocalidadModel;
 import model.MapaModel;
+import model.dtos.ConfigurationDto;
 import model.dtos.LocalidadDto;
 import view.MapaView;
 import view.dialogs.LocalidadDialog;
@@ -21,22 +21,21 @@ public class MapaController implements IMapaListener, IMapaObserver, ILocalidadO
 	private MapaModel model;
 	private MapaView view;
 	private LocalidadDialog localidadDialog;
-	private LocalidadController localidadController;
 	private LocalidadModel localidadModel;
 	private Map<String, Localidad> localidades;
 
 	public MapaController(MapaModel model, MapaView view) {
 		this.model = model;
 		this.view = view;
+		this.model.addObserver(this);
 
 		this.localidades = new LinkedHashMap<>();
 		this.localidadDialog = new LocalidadDialog();
 		this.localidadModel = new LocalidadModel();
-		this.localidadController = new LocalidadController(this.localidadDialog, this.localidadModel);
+		new LocalidadController(this.localidadDialog, this.localidadModel);
 
-		this.view.getObservable().addObserver(this);
-		this.localidadDialog.getObservable().addObserver(this.localidadController);
 		this.localidadModel.addObserver(this);
+		this.view.getObservable().addObserver(this);
 		initializarLocalidades();
 	}
 
@@ -56,8 +55,8 @@ public class MapaController implements IMapaListener, IMapaObserver, ILocalidadO
 
 	@Override
 	public void onCalcular() {
-		// TODO Auto-generated method stub
-
+		ConfigurationDto dto = this.view.obtenerConfigurables();
+		this.model.generarRed(dto, this.localidades);
 	}
 
 	@Override
@@ -69,33 +68,7 @@ public class MapaController implements IMapaListener, IMapaObserver, ILocalidadO
 	}
 
 	@Override
-	public void onLocalidadSeleccionada(int index) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onCostoKmChanged(String nuevoValor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onRecargoChanged(String nuevoValor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onCostoDifProvChanged(String nuevoValor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void onError(String errorMessage) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -109,8 +82,7 @@ public class MapaController implements IMapaListener, IMapaObserver, ILocalidadO
 
 	private void dibujarLocalidadesEnMapa() {
 		this.localidades.forEach((nombre, localidad) -> {
-			LocalidadDto dto = new LocalidadDto(localidad.getNombre(), localidad.getProvincia(),
-					String.valueOf(localidad.getLatitud()), String.valueOf(localidad.getLongitud()));
+			LocalidadDto dto = localidadToDto(localidad);
 			this.view.agregarLocalidadAlMapa(dto);
 		});
 	}
@@ -122,9 +94,47 @@ public class MapaController implements IMapaListener, IMapaObserver, ILocalidadO
 	}
 
 	@Override
-	public void onLocalidadAgregada() {
+	public void onLocalidadSeleccionada(String nombreLocalidad) {
+		Localidad localidad = this.localidades.get(nombreLocalidad);
+		if (localidad != null) {
+			LocalidadDto dto = localidadToDto(localidad);
+			this.view.hacerFocoEnLocalidadSeleccionada(dto);
+		}
+	}
+
+	@Override
+	public void onEliminarLocalidad(String nombreLocalidad) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onActualizarLocalidad(String nombreLocalidad) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public LocalidadDto localidadToDto(Localidad localidad) {
+		LocalidadDto dto = new LocalidadDto(localidad.getNombre(), localidad.getProvincia(),
+				String.valueOf(localidad.getLatitud()), String.valueOf(localidad.getLongitud()));
+		return dto;
+	}
+
+	@Override
+	public void onRedCreated(Grafo red) {
+		LocalidadDto dto = localidadToDto(red.getLocalidades().getFirst());
+		this.view.resaltarPrimerVertice(dto);
+		red.getTodasLasConexiones().forEach((conexion) -> {
+			LocalidadDto origen = localidadToDto(conexion.getOrigen());
+			LocalidadDto destino = localidadToDto(conexion.getDestino());
+			this.view.dibujarConexion(origen, destino, conexion.getCosto());
+		});
+		this.view.actualizarTotal(red.calcularCostoTotal());
+	}
+
+	@Override
+	public void onMapaError(String message) {
+		this.view.mostrarError(message);
 	}
 
 }
