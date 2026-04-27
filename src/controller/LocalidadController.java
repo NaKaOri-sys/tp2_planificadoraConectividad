@@ -2,7 +2,6 @@ package controller;
 
 import java.util.Map;
 
-import dao.LocalidadDao;
 import events.ILocalidadListener;
 import events.ILocalidadObserver;
 import model.Localidad;
@@ -34,18 +33,17 @@ public class LocalidadController implements ILocalidadListener, ILocalidadObserv
 			this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(), latitud,
 					longitud);
 		} catch (NumberFormatException e) {
-			this.localidadDialog.mostrarError(e.getMessage());
-			return;
+			this.localidadDialog.mostrarError("Latitud y longitud deben ser números válidos.");
 		}
 	}
 
 	@Override
 	public void onLocalidadCreated(Map<String, Localidad> localidades) {
-		LocalidadDao.generarJsonLocalidad("localidades.json", localidades);
+		this.localidadModel.saveToJson();
 	}
 
 	@Override
 	public void onLocalidadDeleted(Map<String, Localidad> localidades) {
-		LocalidadDao.generarJsonLocalidad("localidades.json", localidades);
+		this.localidadModel.saveToJson();
 	}
 }

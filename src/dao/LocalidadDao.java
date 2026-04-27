@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import model.Localidad;
 
 public class LocalidadDao {
+	public static final String FILE_PATH = "localidades.json";
 	public static void generarJsonLocalidad(String nombreArchivo, Map<String, Localidad> localidades)
 			throws IllegalArgumentException {
 		if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
@@ -50,6 +51,19 @@ public class LocalidadDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static void eliminarArchivoJson(String nombreArchivo) {
+		if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío.");
+		}
+		try {
+			FileWriter writer = new FileWriter(nombreArchivo);
+			writer.write("{}");
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
