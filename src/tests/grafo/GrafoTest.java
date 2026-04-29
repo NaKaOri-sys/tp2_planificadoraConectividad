@@ -3,9 +3,10 @@ package tests.grafo;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import model.Conexion;
-import model.Grafo;
-import model.Localidad;
+
+import model.entities.Conexion;
+import model.entities.Grafo;
+import model.entities.Localidad;
 
 public class GrafoTest {
 	private Grafo grafo;

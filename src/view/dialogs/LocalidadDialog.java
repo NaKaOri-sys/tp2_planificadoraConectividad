@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import events.ILocalidadListener;
-import events.ILocalidadObserver;
 import model.dtos.LocalidadDto;
 import util.Observable;
 

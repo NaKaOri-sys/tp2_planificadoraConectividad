@@ -2,7 +2,16 @@ package model;
 
 import java.util.Set;
 
+import model.entities.Conexion;
+import model.entities.Grafo;
+import model.entities.Localidad;
+
 public class AGM {
+	// TODO: VIOLACIÓN OCP (Open-Closed Principle) - AGM está hardcodeado para usar una estrategia fija (Prim).
+	// Si en el futuro se quiere usar Kruskal u otro algoritmo, habría que modificar esta clase.
+	// Mejora: extraer una interfaz MST o SpanningTreeAlgorithm que permita inyectar diferentes algoritmos
+	// sin modificar AGM. Así AGM sería "cerrada para modificación, abierta para extensión".
+	
 	private Grafo grafo;
 
 	public AGM(Grafo g) {

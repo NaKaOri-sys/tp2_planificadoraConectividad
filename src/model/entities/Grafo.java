@@ -1,4 +1,4 @@
-package model;
+package model.entities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,10 +10,12 @@ import java.util.Set;
 public class Grafo {
 	private Map<Localidad, List<Conexion>> mapaDeRedes;
 	private Map<Localidad, Set<Localidad>> vecinos;
+	private Set<Conexion> conexionesUnicas;
 
 	public Grafo() {
 		this.mapaDeRedes = new LinkedHashMap<>();
 		this.vecinos = new LinkedHashMap<>();
+		this.conexionesUnicas = new HashSet<Conexion>();
 	}
 
 	public void agregarLocalidad(Localidad localidad) {
@@ -56,6 +58,7 @@ public class Grafo {
 
 		vecinos.get(conexion.getOrigen()).add(conexion.getDestino());
 		vecinos.get(conexion.getDestino()).add(conexion.getOrigen());
+		this.conexionesUnicas.add(conexion);
 	}
 
 	public List<Conexion> getConexiones(Localidad localidad) {
@@ -68,12 +71,8 @@ public class Grafo {
 		return new ArrayList<>(mapaDeRedes.keySet());
 	}
 
-	public List<Conexion> getTodasLasConexiones() {
-		Set<Conexion> conexionesUnicas = new HashSet<>();
-		for (List<Conexion> conexiones : mapaDeRedes.values()) {
-			conexionesUnicas.addAll(conexiones);
-		}
-		return new ArrayList<>(conexionesUnicas);
+	public Set<Conexion> getTodasLasConexiones() {
+		return new HashSet<>(this.conexionesUnicas);
 	}
 
 	public boolean existeLocalidad(Localidad localidad) {

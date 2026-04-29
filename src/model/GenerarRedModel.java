@@ -4,18 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import model.entities.Conexion;
+import model.entities.CostCalculator;
+import model.entities.DistanceCalculator;
+import model.entities.Grafo;
+import model.entities.Localidad;
+
 public class GenerarRedModel {
+	
 	private double costoKm;
 	private double recargo;
 	private double costoDifProv;
 	private Map<String, Localidad> localidades;
 	private Grafo grafo = new Grafo();
+	private final CostCalculator costCalculator;
+	private final DistanceCalculator distanceCalculator;
 
 	public GenerarRedModel(double costoKM, double recargo, double costoDifProv, Map<String, Localidad> localidades) {
-		this.costoKm = costoKM;
-		this.recargo = recargo;
-		this.costoDifProv = costoDifProv;
+		this.grafo = new Grafo();
 		this.localidades = localidades;
+		this.costCalculator = new CostCalculator(costoKM, recargo, costoDifProv);
+		this.distanceCalculator = new DistanceCalculator();
 		generarGrafo();
 	}
 
@@ -36,30 +45,15 @@ public class GenerarRedModel {
 	}
 
 	private double calcularCostoConexion(double costoKm, double recargo, double costoDifProv, Localidad origen, Localidad destino) {
-		double km = distanciaEnKm(origen, destino);
+		double km = this.distanceCalculator.calcularDistanciaHaversine(origen, destino);
+		double costoConexion = this.costCalculator.calcularCosto(origen, destino, km);
 		
-		double base = (km * costoKm);
-		double adicionalDistancia = km > 300 ? (base * recargo) / 100.0 : 0;
-		
-		double adicionalDifProvincia = !origen.getProvincia().equalsIgnoreCase(destino.getProvincia()) ? costoDifProv : 1;
-		return base + adicionalDistancia + adicionalDifProvincia;
-	}
-	
-	private double distanciaEnKm(Localidad origen, Localidad destino) {
-		final int RADIO_TIERRA = 6371; // Radio de la Tierra en km
-		double dLat = Math.toRadians(destino.getLatitud() - origen.getLatitud());
-		double dLon = Math.toRadians(destino.getLongitud() - origen.getLongitud());
-		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-				Math.cos(Math.toRadians(origen.getLatitud())) * Math.cos(Math.toRadians(destino.getLatitud())) *
-				Math.sin(dLon / 2) * Math.sin(dLon / 2);
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		return RADIO_TIERRA * c;
+		return costoConexion;
 	}
 	
 	public Grafo generarRed() {
 		AGM agm = new AGM(this.grafo);
-		Grafo resultado = agm.generarAGM();
-		return resultado;
+		return agm.generarAGM();
 	} 
 
 }

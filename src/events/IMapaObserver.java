@@ -1,6 +1,6 @@
 package events;
 
-import model.Grafo;
+import model.entities.Grafo;
 
 public interface IMapaObserver {
 	void onRedCreated(Grafo grafo);

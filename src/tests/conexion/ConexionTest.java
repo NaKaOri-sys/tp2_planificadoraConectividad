@@ -3,8 +3,9 @@ package tests.conexion;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import model.Conexion;
-import model.Localidad;
+
+import model.entities.Conexion;
+import model.entities.Localidad;
 
 public class ConexionTest {
 	private Localidad SanMiguel;

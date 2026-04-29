@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import dao.LocalidadDao;
 import events.ILocalidadObserver;
+import model.entities.Localidad;
+import model.repository.LocalidadRepositoryJson;
 import util.Observable;
 
 public class LocalidadModel extends Observable<ILocalidadObserver> implements Serializable {
@@ -14,8 +15,10 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 	 */
 	private static final long serialVersionUID = 1L;
 	private Map<String, Localidad> localidades;
+	private final LocalidadRepositoryJson repositoryJson;
 
-	public LocalidadModel() {
+	public LocalidadModel(LocalidadRepositoryJson localidadRepositoryJson) {
+		this.repositoryJson = localidadRepositoryJson;
 		this.localidades = loadFromJson();
 	}
 
@@ -26,7 +29,6 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 			notifyObservers(observer -> observer.onLocalidadCreated(this.localidades));
 		} catch (IllegalArgumentException e) {
 			notifyObservers(observer -> observer.onError(e.getMessage()));
-			return;
 		}
 	}
 
@@ -39,20 +41,29 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 		return localidades;
 	}
 
-	public LinkedHashMap<String, Localidad> loadFromJson() {
-		LinkedHashMap<String, Localidad> localidades = LocalidadDao.cargarDesdeJson(LocalidadDao.FILE_PATH);
-		if (localidades != null) {
-			return localidades;
+	public Map<String, Localidad> loadFromJson() {
+		try {
+			return this.repositoryJson.loadAll();
+		} catch (RuntimeException e) {
+			System.err.println(e.getMessage());
+			return new LinkedHashMap<>();
 		}
-		return new LinkedHashMap<>();
 	}
-	
+
 	public void saveToJson() {
-		LocalidadDao.generarJsonLocalidad(LocalidadDao.FILE_PATH, this.localidades);
+		try {
+			this.repositoryJson.saveAll(this.localidades);
+		} catch (RuntimeException e) {
+			notifyObservers(observer -> observer.onError("Error al persistir la localidad " + e.getMessage()));
+		}
 	}
-	
+
 	public void deleteAllLocalidades() {
-		this.localidades.clear();
-		LocalidadDao.eliminarArchivoJson(LocalidadDao.FILE_PATH);
+		try {
+			this.localidades.clear();
+			this.repositoryJson.cleanAll();
+		} catch (RuntimeException e) {
+			System.err.println("Hubo un error al limpiar el archivo " + e.getMessage());
+		}
 	}
 }
