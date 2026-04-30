@@ -1,6 +1,9 @@
-package model;
+package model.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
+
+import model.dtos.LocalidadDto;
 
 public class Localidad implements Serializable {
 	/** 
@@ -66,28 +69,43 @@ public class Localidad implements Serializable {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(nombre, provincia, latitud, longitud);
+	}
+
+	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof Localidad)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Localidad other = (Localidad) obj;
+		if (Double.doubleToLongBits(latitud) != Double.doubleToLongBits(other.latitud)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(longitud) != Double.doubleToLongBits(other.longitud)) {
+			return false;
+		}
 		if (nombre == null) {
-			if (other.nombre != null)
+			if (other.nombre != null) {
 				return false;
-		} else if (!nombre.equals(other.nombre))
+			}
+		} else if (!nombre.equals(other.nombre)) {
 			return false;
+		}
 		if (provincia == null) {
-			if (other.provincia != null)
+			if (other.provincia != null) {
 				return false;
-		} else if (!provincia.equals(other.provincia))
+			}
+		} else if (!provincia.equals(other.provincia)) {
 			return false;
-		if (Double.doubleToLongBits(latitud) != Double.doubleToLongBits(other.latitud))
-			return false;
-		if (Double.doubleToLongBits(longitud) != Double.doubleToLongBits(other.longitud))
-			return false;
+		}
 		return true;
+	}
+	
+	public LocalidadDto toDto() {
+		return new LocalidadDto(nombre, provincia,String.valueOf(this.latitud), String.valueOf(this.longitud));
 	}
 }

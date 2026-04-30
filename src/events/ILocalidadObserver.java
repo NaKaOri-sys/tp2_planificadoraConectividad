@@ -2,8 +2,7 @@ package events;
 
 import java.util.Map;
 
-import model.Localidad;
-import model.dtos.LocalidadDto;
+import model.entities.Localidad;
 
 public interface ILocalidadObserver {
 	/**

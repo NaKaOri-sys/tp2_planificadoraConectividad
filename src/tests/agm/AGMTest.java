@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.AGM;
-import model.Conexion;
-import model.Grafo;
-import model.Localidad;
+import model.entities.Conexion;
+import model.entities.Grafo;
+import model.entities.Localidad;
 
 public class AGMTest {
 

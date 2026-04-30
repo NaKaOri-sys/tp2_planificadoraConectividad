@@ -5,10 +5,6 @@ import javax.swing.JFrame;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
-import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
-import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
-
-import events.ILocalidadListener;
 import events.IMapaListener;
 import model.dtos.ConfigurationDto;
 import model.dtos.LocalidadDto;
@@ -25,19 +21,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Point;
-
 import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Set;
-import java.awt.event.ActionEvent;
 
 public class MapaView extends JFrame {
 
@@ -250,10 +241,8 @@ public class MapaView extends JFrame {
 		lblCostoTotal.setText("$" + total);
 	}
 	
-	
 	public ConfigurationDto obtenerConfigurables() {
-		ConfigurationDto dto = new ConfigurationDto(this.txtCostoKm.getText(), this.txtRecargo.getText(), this.txtCostoDifProv.getText());
-		
+		ConfigurationDto dto = new ConfigurationDto(this.txtCostoKm.getText(), this.txtRecargo.getText(), this.txtCostoDifProv.getText());	
 		return dto;
 	}
 

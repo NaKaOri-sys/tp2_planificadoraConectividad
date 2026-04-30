@@ -4,9 +4,14 @@ import java.util.Map;
 
 import events.IMapaObserver;
 import model.dtos.ConfigurationDto;
+import model.entities.Localidad;
 import util.Observable;
 
 public class MapaModel extends Observable<IMapaObserver> {
+	// TODO: POTENCIAL VIOLACIÓN DIP (Dependency Inversion Principle) - MapaModel accede directamente a GenerarRedModel.
+	// Mejora: inyectar una abstracción/interfaz para la generación de redes (e.g., RedGenerator)
+	// para desacoplar de detalles concretos.
+	
 	private double costoKm;
 	private double recargo;
 	private double costoDifProv;

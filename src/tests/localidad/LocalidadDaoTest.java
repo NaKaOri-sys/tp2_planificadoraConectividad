@@ -10,8 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dao.LocalidadDao;
-import model.Localidad;
+import model.dao.LocalidadDao;
+import model.entities.Localidad;
 
 public class LocalidadDaoTest {
 	private Map<String, Localidad> localidades = new LinkedHashMap<>();
