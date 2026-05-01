@@ -14,6 +14,10 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	// TODO SOLID - SRP Violation: Esta clase maneja tanto lógica de negocio como persistencia (JSON)
+	// Responsabilidades actuales: 1) Gestionar estado de localidades 2) Cargar/guardar en JSON 3) Notificar observadores
+	// SOLUCIÓN: Crear una interfaz ILocalidadRepository (ya existe LocalidadRepositoryJson) y usar inyección de dependencias
+	// La persistencia debería estar completamente separada. Considerar pattern Repository o DAO
 	private Map<String, Localidad> localidades;
 	private final LocalidadRepositoryJson repositoryJson;
 

@@ -5,21 +5,24 @@ import java.util.Map;
 import events.IMapaObserver;
 import model.dtos.ConfigurationDto;
 import model.entities.Localidad;
+import model.interfaces.IGenerarRed;
 import util.Observable;
 
 public class MapaModel extends Observable<IMapaObserver> {
-	// TODO: POTENCIAL VIOLACIÓN DIP (Dependency Inversion Principle) - MapaModel accede directamente a GenerarRedModel.
-	// Mejora: inyectar una abstracción/interfaz para la generación de redes (e.g., RedGenerator)
-	// para desacoplar de detalles concretos.
-	
+	// TODO SOLID - SRP Violation: Clase con responsabilidades mixtas
+	// Responsabilidades: 1) Guardar configuración 2) Validar configuración 3) Orquestar generación de red
+	// SOLUCIÓN: Crear una clase ConfigurationValidator separada para encapsular toda la lógica de validación
+	// Esto haría MapaModel más simple y la validación reutilizable
 	private double costoKm;
 	private double recargo;
 	private double costoDifProv;
-
-	public MapaModel() {
+	private IGenerarRed generarRed;
+	
+	public MapaModel(IGenerarRed generarRed) {
 		this.costoKm = 0.0;
 		this.recargo = 0.0;
 		this.costoDifProv = 0.0;
+		this.generarRed = generarRed;
 	}
 
 	public void setConfiguration(ConfigurationDto dto) {
@@ -52,8 +55,10 @@ public class MapaModel extends Observable<IMapaObserver> {
 			if (localidades.size() < 2)
 				throw new IllegalArgumentException("Debe haber por lo menos 2 localidades cargadas.");
 			setConfiguration(dto);
-			GenerarRedModel red = new GenerarRedModel(costoKm, recargo, costoDifProv, localidades);
-			this.notifyObservers(o -> o.onRedCreated(red.generarRed()));
+			// TODO SOLID - DIP: El modelo accede directamente a una interfaz inyectada pero también
+			// realiza validaciones de negocio. Considerar extraer un servicio de validación de configuración
+			// para hacer la lógica más testeable y reutilizable en otros contextos
+			this.notifyObservers(o -> o.onRedCreated(this.generarRed.generarRed(costoKm, recargo, costoDifProv, localidades)));
 		} catch (NumberFormatException e) {
 			notifyObservers(o -> o.onMapaError("Los campos de costos configurables deben ser números validos"));
 			return;

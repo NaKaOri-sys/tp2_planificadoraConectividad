@@ -15,6 +15,11 @@ import view.dialogs.LocalidadDialog;
  * localidades.
  */
 public class LocalidadDialogFacade implements ILocalidadListener {
+	// TODO SOLID - SRP & DIP Violation: LocalidadModel.saveToJson() es llamada desde LocalidadController
+	// Esto significa que la persistencia está esparcida entre múltiples clases
+	// SOLUCIÓN: Crear un servicio dedicado a persistencia (LocalidadPersistenceService) que sea inyectado
+	// Refactorizar para que LocalidadModel NO tenga métodos de persistencia
+	// El controlador debería solo orquestar y el modelo debería ser puro
 	private LocalidadDialog localidadDialog;
 	private LocalidadModel localidadModel;
 
