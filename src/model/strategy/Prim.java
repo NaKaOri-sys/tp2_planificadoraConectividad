@@ -9,6 +9,10 @@ import model.entities.Localidad;
 public class Prim implements IArbolGeneradorMinimo {
 	private Grafo grafo;
 
+	public Prim() {
+
+	}
+
 	public Prim(Grafo g) {
 		validateGrafo(g);
 		this.grafo = g;

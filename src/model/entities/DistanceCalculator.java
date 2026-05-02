@@ -1,14 +1,23 @@
 package model.entities;
 
 public class DistanceCalculator {
-	private final int RADIO_TIERRA = 6371; // Radio de la Tierra en km
+	private final double RADIO_TIERRA = 6371; 
 	public double calcularDistanciaHaversine(Localidad origen, Localidad destino) {
-		double dLat = Math.toRadians(destino.getLatitud() - origen.getLatitud());
-		double dLon = Math.toRadians(destino.getLongitud() - origen.getLongitud());
-		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-				Math.cos(Math.toRadians(origen.getLatitud())) * Math.cos(Math.toRadians(destino.getLatitud())) *
-				Math.sin(dLon / 2) * Math.sin(dLon / 2);
+		// Convertir coordenadas de grados a radianes
+		double lat1 = Math.toRadians(origen.getLatitud());
+		double lat2 = Math.toRadians(destino.getLatitud());
+		double deltaLat = Math.toRadians(destino.getLatitud() - origen.getLatitud());
+		double deltaLon = Math.toRadians(destino.getLongitud() - origen.getLongitud());
+		
+		// Aplicar fórmula de Haversine
+		double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+				Math.cos(lat1) * Math.cos(lat2) *
+				Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+		
+		// Calcular ángulo central usando atan2 (más estable numéricamente que asin)
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		
+		// Retornar distancia
 		return RADIO_TIERRA * c;
 	}
 }

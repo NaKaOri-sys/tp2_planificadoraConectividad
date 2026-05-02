@@ -12,10 +12,6 @@ import model.entities.Localidad;
 import view.MapaView;
 
 public class MapEventController implements IMapaListener {
-	// TODO SOLID - SRP Violation: Clase con múltiples responsabilidades
-	// Esta clase maneja: 1) Lógica de localidades (onAgregarLocalidad, onEliminarLocalidad, onActualizarLocalidad, onLocalidadSeleccionada)
-	// 2) Lógica de mapa (onCalcular, onLimpiarMapa)
-	// SOLUCIÓN: Separar en dos controllers: LocalidadEventController (para localidades) y MapCalculationController (para cálculos del mapa)
 	private MapaModel model;
 	private MapaView view;
 	private LocalidadDialogFacade localidadFacade;

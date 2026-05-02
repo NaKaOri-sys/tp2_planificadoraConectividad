@@ -71,4 +71,10 @@ public class LocalidadDaoTest {
 		}
 	}
 
+	// TODO Agregar test para verificar que los datos guardados son idénticos a los cargados (contenido exacto)
+	// TODO Agregar test para guardar y cargar un Map vacío
+	// TODO Agregar test para cargarDesdeJson con archivo json malformado
+	// TODO Agregar test para validar que cargarDesdeJson devuelve LinkedHashMap (preserva orden)
+	// TODO Agregar test para actualizar un archivo json existente (sobrescritura)
+	// TODO Agregar test para archivo json muy grande (performance)
 }

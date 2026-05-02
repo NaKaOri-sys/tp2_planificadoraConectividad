@@ -6,7 +6,7 @@ import java.util.Map;
 
 import events.ILocalidadObserver;
 import model.entities.Localidad;
-import model.repository.LocalidadRepositoryJson;
+import model.repository.ILocalidadRepository;
 import util.Observable;
 
 public class LocalidadModel extends Observable<ILocalidadObserver> implements Serializable {
@@ -14,26 +14,23 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	// TODO SOLID - SRP Violation: Esta clase maneja tanto lógica de negocio como persistencia (JSON)
-	// Responsabilidades actuales: 1) Gestionar estado de localidades 2) Cargar/guardar en JSON 3) Notificar observadores
-	// SOLUCIÓN: Crear una interfaz ILocalidadRepository (ya existe LocalidadRepositoryJson) y usar inyección de dependencias
-	// La persistencia debería estar completamente separada. Considerar pattern Repository o DAO
 	private Map<String, Localidad> localidades;
-	private final LocalidadRepositoryJson repositoryJson;
+	private final ILocalidadRepository repository;
 
-	public LocalidadModel(LocalidadRepositoryJson localidadRepositoryJson) {
-		this.repositoryJson = localidadRepositoryJson;
+	public LocalidadModel(ILocalidadRepository repository) {
+		this.repository = repository;
 		this.localidades = loadFromJson();
 	}
 
 	public void agregarLocalidad(String nombre, String provincia, double latitud, double longitud) {
 		try {
 			Localidad localidad = new Localidad(nombre, provincia, latitud, longitud);
-			this.localidades.put(localidad.getNombre(), localidad);
-			notifyObservers(observer -> observer.onLocalidadCreated(this.localidades));
+			this.localidades.put(localidad.getNombre() + " - "+ localidad.getProvincia(), localidad);
 		} catch (IllegalArgumentException e) {
 			notifyObservers(observer -> observer.onError(e.getMessage()));
+			return;
 		}
+		notifyObservers(observer -> observer.onLocalidadCreated(this.localidades));
 	}
 
 	public void eliminarLocalidad(Localidad localidad) {
@@ -47,7 +44,7 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 
 	public Map<String, Localidad> loadFromJson() {
 		try {
-			return this.repositoryJson.loadAll();
+			return this.repository.loadAll();
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 			return new LinkedHashMap<>();
@@ -56,7 +53,7 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 
 	public void saveToJson() {
 		try {
-			this.repositoryJson.saveAll(this.localidades);
+			this.repository.saveAll(this.localidades);
 		} catch (RuntimeException e) {
 			notifyObservers(observer -> observer.onError("Error al persistir la localidad " + e.getMessage()));
 		}
@@ -65,7 +62,7 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 	public void deleteAllLocalidades() {
 		try {
 			this.localidades.clear();
-			this.repositoryJson.cleanAll();
+			this.repository.cleanAll();
 		} catch (RuntimeException e) {
 			System.err.println("Hubo un error al limpiar el archivo " + e.getMessage());
 		}

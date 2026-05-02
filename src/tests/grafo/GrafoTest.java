@@ -97,5 +97,11 @@ public class GrafoTest {
 		grafo.agregarLocalidad(ManuelAlberti);
 		assertTrue(grafo.getConexiones(ManuelAlberti).isEmpty());
 	}
-	
+
+	// TODO Agregar test para agregar múltiples conexiones desde una misma localidad
+	// TODO Agregar test para getTodasLasConexiones() (obtener todas las aristas)
+	// TODO Agregar test para calcularCostoTotal() (suma de todas las aristas)
+	// TODO Agregar test para verificar que getLocalidades retorna todos los nodos
+	// TODO Agregar test para eliminar conexión específica (si existe tal método)
+	// TODO Agregar test para conectividad del grafo (verificar si es conexo)
 }

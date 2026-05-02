@@ -1,12 +1,9 @@
 package controller;
 
-import java.util.Map;
-
 import events.ILocalidadListener;
 import model.LocalidadModel;
 import model.dtos.LocalidadDto;
 import model.entities.CoordinateValidator;
-import model.entities.Localidad;
 import view.dialogs.LocalidadDialog;
 
 /**
@@ -15,11 +12,6 @@ import view.dialogs.LocalidadDialog;
  * localidades.
  */
 public class LocalidadDialogFacade implements ILocalidadListener {
-	// TODO SOLID - SRP & DIP Violation: LocalidadModel.saveToJson() es llamada desde LocalidadController
-	// Esto significa que la persistencia está esparcida entre múltiples clases
-	// SOLUCIÓN: Crear un servicio dedicado a persistencia (LocalidadPersistenceService) que sea inyectado
-	// Refactorizar para que LocalidadModel NO tenga métodos de persistencia
-	// El controlador debería solo orquestar y el modelo debería ser puro
 	private LocalidadDialog localidadDialog;
 	private LocalidadModel localidadModel;
 
@@ -44,7 +36,8 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * @param nombreLocalidad Nombre de la localidad a editar
 	 */
 	public void mostrarParaEditar(String nombreLocalidad) {
-		// TODO implementar
+		// TODO Implementar: Obtener localidad del modelo, rellenar formulario, mostrar diálogo
+		// Debe permitir editar solo coordenadas (latitud/longitud)
 	}
 
 	/**
@@ -53,7 +46,8 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * @param nombreLocalidad Nombre de la localidad a eliminar
 	 */
 	public void eliminar(String nombreLocalidad) {
-		// TODO implementar
+		// TODO Implementar: Obtener localidad del modelo, llamar a eliminarLocalidad(), guardar cambios
+		// El modelo dispara onLocalidadDeleted que hace saveToJson() automáticamente
 	}
 
 	@Override
@@ -75,7 +69,8 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * @param localidadDto Nuevos datos de la localidad
 	 */
 	private void actualizarLocalidad(LocalidadDto localidadDto) {
-		// TODO implementar
+		// TODO Implementar: Buscar localidad en modelo, actualizar coordenadas, guardar cambios
+		// Nota: Actualmente no existe un método updateLocalidad en LocalidadModel, debe crearse
 	}
 
 	/**
