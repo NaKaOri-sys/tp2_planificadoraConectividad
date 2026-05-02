@@ -70,9 +70,9 @@ public class Localidad implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(nombre, provincia, latitud, longitud);
+		return Objects.hash(Double.valueOf(latitud), Double.valueOf(longitud), nombre, provincia);
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -82,29 +82,11 @@ public class Localidad implements Serializable {
 			return false;
 		}
 		Localidad other = (Localidad) obj;
-		if (Double.doubleToLongBits(latitud) != Double.doubleToLongBits(other.latitud)) {
-			return false;
-		}
-		if (Double.doubleToLongBits(longitud) != Double.doubleToLongBits(other.longitud)) {
-			return false;
-		}
-		if (nombre == null) {
-			if (other.nombre != null) {
-				return false;
-			}
-		} else if (!nombre.equals(other.nombre)) {
-			return false;
-		}
-		if (provincia == null) {
-			if (other.provincia != null) {
-				return false;
-			}
-		} else if (!provincia.equals(other.provincia)) {
-			return false;
-		}
-		return true;
+		return Double.doubleToLongBits(latitud) == Double.doubleToLongBits(other.latitud)
+				&& Double.doubleToLongBits(longitud) == Double.doubleToLongBits(other.longitud)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(provincia, other.provincia);
 	}
-	
+
 	public LocalidadDto toDto() {
 		return new LocalidadDto(nombre, provincia,String.valueOf(this.latitud), String.valueOf(this.longitud));
 	}

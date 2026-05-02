@@ -1,5 +1,7 @@
 package model.entities;
 
+import java.util.Objects;
+
 public class Conexion {
 	private Localidad origen;
 	private Localidad destino;
@@ -38,4 +40,24 @@ public class Conexion {
 	public double getCosto() {
 		return costo;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(Double.valueOf(costo), destino, origen);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Conexion)) {
+			return false;
+		}
+		Conexion other = (Conexion) obj;
+		return Double.doubleToLongBits(costo) == Double.doubleToLongBits(other.costo)
+				&& Objects.equals(destino, other.destino) && Objects.equals(origen, other.origen);
+	}
+	
+	
 }
