@@ -70,3 +70,9 @@ public class Prim implements IArbolGeneradorMinimo {
 		return minima;
 	}
 }
+// TODO Implementar tests unitarios para clase Prim:
+// - Test para generarAGM con grafo de 3 localidades
+// - Test para generarAGM con grafo desconexo (debe retornar árbol parcial)
+// - Test para verificar que el costo del AGM es mínimo
+// - Test para generarAGM con grafo completo (todas las aristas conectadas)
+// - Test para grafo con ciclos (debe generar árbol sin ciclos)

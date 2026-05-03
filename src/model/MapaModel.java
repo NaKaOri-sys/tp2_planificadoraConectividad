@@ -21,6 +21,14 @@ public class MapaModel extends Observable<IMapaObserver> {
 		this.generarRed = generarRed;
 	}
 
+	// TODO Implementar: Permitir que el usuario modifique la solución
+	// Agregar método para cambiar una conexión por otra y calcular el nuevo costo
+	// Esto incluiría:
+	// - Eliminar una conexión existente del AGM
+	// - Evaluar qué otras conexiones del grafo completo podrían reemplazarla
+	// - Calcular el impacto en el costo total
+	// - Permitir que el usuario acepte o rechace el cambio
+
 	public void setConfiguration(ConfigurationDto dto) {
 		this.costoKm = Double.parseDouble(dto.getCostoKm());
 		if (costoKm <= 0)

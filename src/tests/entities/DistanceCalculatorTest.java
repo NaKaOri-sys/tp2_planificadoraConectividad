@@ -44,7 +44,6 @@ public class DistanceCalculatorTest {
 	public void testDistanciaEntreLocalidadesDistantes() {
 		// San Miguel a Córdoba (646 km aproximadamente)
 		double distancia = distanceCalculator.calcularDistanciaHaversine(SanMiguel, Cordoba);
-		System.out.println(distancia);
 		assertTrue(distancia > 600 && distancia < 700);
 	}
 
@@ -61,11 +60,10 @@ public class DistanceCalculatorTest {
 		assertTrue(distancia >= 0);
 	}
 
-	// TODO Agregar test con coordenadas de Ecuador (latitud=0)
-	// TODO Agregar test con coordenadas cercanas a Antípodas (puntos opuestos en la
-	// tierra)
-	// TODO Agregar test con coordenadas en diferentes hemisferios
-	// TODO Agregar test con coordenadas en los polos
-	// TODO Agregar test para validar que el radio de la tierra (6371) se usa
-	// correctamente
+	@Test
+	public void testDistanciaEntreBuenosAiresYCordoba() {
+		// Test para distancia entre Buenos Aires y Córdoba (valor conocido ~646 km)
+		double distancia = distanceCalculator.calcularDistanciaHaversine(SanMiguel, Cordoba);
+		assertTrue("Distancia debe estar entre 640 y 660 km", distancia > 640 && distancia < 660);
+	}
 }

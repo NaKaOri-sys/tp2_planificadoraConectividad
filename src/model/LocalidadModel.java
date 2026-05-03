@@ -25,7 +25,7 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 	public void agregarLocalidad(String nombre, String provincia, double latitud, double longitud) {
 		try {
 			Localidad localidad = new Localidad(nombre, provincia, latitud, longitud);
-			this.localidades.put(localidad.getNombre() + " - "+ localidad.getProvincia(), localidad);
+			this.localidades.put(localidad.buildKeyLocalidad(), localidad);
 		} catch (IllegalArgumentException e) {
 			notifyObservers(observer -> observer.onError(e.getMessage()));
 			return;

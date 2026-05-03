@@ -67,12 +67,16 @@ public class Localidad implements Serializable {
 	public double getLongitud() {
 		return longitud;
 	}
-	
+
+	public String buildKeyLocalidad() {
+		return this.getNombre() + " - " + this.getProvincia();
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(latitud), Double.valueOf(longitud), nombre, provincia);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -88,6 +92,6 @@ public class Localidad implements Serializable {
 	}
 
 	public LocalidadDto toDto() {
-		return new LocalidadDto(nombre, provincia,String.valueOf(this.latitud), String.valueOf(this.longitud));
+		return new LocalidadDto(nombre, provincia, String.valueOf(this.latitud), String.valueOf(this.longitud));
 	}
 }

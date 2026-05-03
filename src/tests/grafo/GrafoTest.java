@@ -98,10 +98,50 @@ public class GrafoTest {
 		assertTrue(grafo.getConexiones(ManuelAlberti).isEmpty());
 	}
 
-	// TODO Agregar test para agregar múltiples conexiones desde una misma localidad
-	// TODO Agregar test para getTodasLasConexiones() (obtener todas las aristas)
-	// TODO Agregar test para calcularCostoTotal() (suma de todas las aristas)
-	// TODO Agregar test para verificar que getLocalidades retorna todos los nodos
-	// TODO Agregar test para eliminar conexión específica (si existe tal método)
-	// TODO Agregar test para conectividad del grafo (verificar si es conexo)
+	@Test
+	public void testAgregarMultiplesConexionesDesdeUnaLocalidad() {
+		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
+		grafo.agregarConexion(new Conexion(SanMiguel, Polvorines, 15.0));
+		
+		assertEquals("Debe tener 2 conexiones", 2, grafo.getConexiones(SanMiguel).size());
+	}
+
+	@Test
+	public void testGetTodasLasConexionesNoDuplicados() {
+		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
+		grafo.agregarConexion(new Conexion(SanMiguel, Polvorines, 15.0));
+		grafo.agregarConexion(new Conexion(ManuelAlberti, Polvorines, 5.0));
+		
+		assertEquals("Debe tener exactamente 3 conexiones únicas", 3, grafo.getTodasLasConexiones().size());
+	}
+
+	@Test
+	public void testCalcularCostoTotal() {
+		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
+		grafo.agregarConexion(new Conexion(SanMiguel, Polvorines, 15.0));
+		grafo.agregarConexion(new Conexion(ManuelAlberti, Polvorines, 25.0));
+		
+		double costoTotal = grafo.calcularCostoTotal();
+		assertEquals("Costo total debe ser 50.0", 50.0, costoTotal, 0.001);
+	}
+
+	@Test
+	public void testSonVecinosVerificaBidireccionalidad() {
+		Conexion conexion = new Conexion(SanMiguel, ManuelAlberti, 10.0);
+		grafo.agregarConexion(conexion);
+		
+		assertTrue("SanMiguel debe ser vecino de ManuelAlberti", grafo.sonVecinos(SanMiguel, ManuelAlberti));
+		assertTrue("ManuelAlberti debe ser vecino de SanMiguel", grafo.sonVecinos(ManuelAlberti, SanMiguel));
+	}
+
+	@Test
+	public void testAgregarConexionSinDuplicar() {
+		Conexion conexion1 = new Conexion(SanMiguel, ManuelAlberti, 10.0);
+		Conexion conexion2 = new Conexion(SanMiguel, ManuelAlberti, 10.0);
+		
+		grafo.agregarConexion(conexion1);
+		grafo.agregarConexion(conexion2);
+		
+		assertEquals("Debe tener solo 1 conexión", 1, grafo.getConexiones(SanMiguel).size());
+	}
 }
