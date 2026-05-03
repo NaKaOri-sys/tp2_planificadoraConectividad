@@ -184,6 +184,13 @@ public class MapaView extends JFrame {
 		lblConfiguraciones.setFont(new Font("SansSerif", Font.BOLD, 14));
 		lblConfiguraciones.setBounds(36, 70, 176, 22);
 		panel.add(lblConfiguraciones);
+		
+		// TODO Implementar: Agregar botón para "Modificar Solución"
+		// Este botón debería permitir:
+		// - Seleccionar una conexión en el mapa
+		// - Mostrar alternativas posibles para reemplazarla
+		// - Calcular el nuevo costo total
+		// - Permitir aplicar o rechazar el cambio
 	}
 
 	public void hacerFocoEnLocalidadSeleccionada(LocalidadDto dto) {

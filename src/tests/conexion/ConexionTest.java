@@ -66,6 +66,4 @@ public class ConexionTest {
 
 		assertTrue(!conexion.equals(this.conexionSanMiguelManuelAlberti));
 	}
-
-	// TODO Agregar test para conexión con costo muy grande
 }

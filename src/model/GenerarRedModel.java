@@ -60,6 +60,12 @@ public class GenerarRedModel implements IGenerarRed {
 		return agm.generarAGM();
 	}
 
+	// TODO Implementar: Métodos para soportar modificación de solución
+	// - calcularCostoSiSeReemplazaConexion(Conexion actual, Conexion reemplazo): double
+	// - verificarValidezDeLaSolucion(): boolean (asegurar que sigue siendo un árbol válido)
+	// - obtenerAlternativasDeConexion(Conexion conexionAReemplazar): List<Conexion>
+
+
 	private void initializeClass(double costoKM, double recargo, double costoDifProv,
 			Map<String, Localidad> localidades) {
 		this.grafo = new Grafo();

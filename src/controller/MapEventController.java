@@ -65,4 +65,12 @@ public class MapEventController implements IMapaListener {
 	public void onActualizarLocalidad(String nombreLocalidad) {
 		this.localidadFacade.mostrarParaEditar(nombreLocalidad);
 	}
+
+	// TODO Implementar: Agregar método para onModificarSolucion()
+	// Este método debería:
+	// - Permitir al usuario seleccionar una conexión del AGM actual
+	// - Mostrar las alternativas disponibles
+	// - Calcular el cambio en el costo total
+	// - Aplicar la modificación si el usuario lo aprueba
+	// - Actualizar la visualización en el mapa
 }

@@ -62,24 +62,6 @@ public class AGMTest {
 	}
 	
 	@Test
-	public void testAGMConGrafoConCiclo() {
-		Localidad joseCPaz = new Localidad("Jose C. Paz", "Buenos Aires", -34.0, -58.0);
-		grafo.agregarLocalidad(SanMiguel);
-		grafo.agregarLocalidad(ManuelAlberti);
-		grafo.agregarLocalidad(joseCPaz);
-		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
-		grafo.agregarConexion(new Conexion(ManuelAlberti, joseCPaz, 5.0));
-		grafo.agregarConexion(new Conexion(SanMiguel, joseCPaz, 15.0));
-		this.agmConPrim = new Prim(this.grafo);
-		Grafo agm = this.agmConPrim.generarAGM();
-		int cantidadDeConexionesEnAGM = agm.getTodasLasConexiones().size();
-		int cantidadDeLocalidadesEnAGM = agm.getLocalidades().size();
-		
-		assertEquals(cantidadDeLocalidadesEnAGM - 1, cantidadDeConexionesEnAGM);
-	}
-	
-	
-	@Test
 	public void testCostoMinimoConCuatroLocalidades() {
 		grafo.agregarLocalidad(SanMiguel);
 		grafo.agregarLocalidad(ManuelAlberti);
@@ -100,10 +82,42 @@ public class AGMTest {
 		assertEquals(costoEsperado, costoTotalAGM, 0.001);
 	}
 
-	// TODO Agregar test para AGM con grafo completo (todas las aristas conectadas)
-	// TODO Agregar test para AGM con grafo donde hay múltiples AGM posibles (verificar que se elige uno)
-	// TODO Agregar test para AGM con grafo de 5+ localidades
-	// TODO Agregar test para verificar que el AGM tiene exactamente N-1 aristas (donde N es cantidad de nodos)
-	// TODO Agregar test para verificar que el AGM es un árbol (no tiene ciclos)
+	@Test
+	public void testAGMConGrafoCompleto() {
+		grafo.agregarLocalidad(SanMiguel);
+		grafo.agregarLocalidad(ManuelAlberti);
+		grafo.agregarLocalidad(JoseCPaz);
+		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
+		grafo.agregarConexion(new Conexion(ManuelAlberti, JoseCPaz, 5.0));
+		grafo.agregarConexion(new Conexion(SanMiguel, JoseCPaz, 15.0));
+		
+		this.agmConPrim = new Prim(this.grafo);
+		Grafo agm = this.agmConPrim.generarAGM();
+		
+		assertEquals("AGM debe tener 3 localidades", 3, agm.getLocalidades().size());
+		assertEquals("AGM debe tener 2 conexiones", 2, agm.getTodasLasConexiones().size());
+	}
+
+	@Test
+	public void testAGMNoTieneCiclos() {
+		grafo.agregarLocalidad(SanMiguel);
+		grafo.agregarLocalidad(ManuelAlberti);
+		grafo.agregarLocalidad(JoseCPaz);
+		grafo.agregarLocalidad(Polvorines);
+		
+		grafo.agregarConexion(new Conexion(SanMiguel, ManuelAlberti, 10.0));
+		grafo.agregarConexion(new Conexion(ManuelAlberti, JoseCPaz, 5.0));
+		grafo.agregarConexion(new Conexion(SanMiguel, JoseCPaz, 15.0));
+		grafo.agregarConexion(new Conexion(SanMiguel, Polvorines, 20.0));
+		grafo.agregarConexion(new Conexion(ManuelAlberti, Polvorines, 25.0));
+		grafo.agregarConexion(new Conexion(JoseCPaz, Polvorines, 30.0));
+		
+		this.agmConPrim = new Prim(this.grafo);
+		Grafo agm = this.agmConPrim.generarAGM();
+		
+		int numNodos = agm.getLocalidades().size();
+		int numAristas = agm.getTodasLasConexiones().size();
+		assertEquals("Un árbol debe tener N-1 aristas", numNodos - 1, numAristas);
+	}
 
 }

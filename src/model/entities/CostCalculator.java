@@ -13,7 +13,7 @@ public class CostCalculator{
 	public double calcularCosto(Localidad origen, Localidad destino, double distanciaKm) {
 		double base = (distanciaKm * costoKm);
 		double adicionalDistancia = distanciaKm > 300 ? (base * recargo) / 100.0 : 0;
- 		double adicionalDifProvincia = !origen.getProvincia().equalsIgnoreCase(destino.getProvincia()) ? costoDifProv : 0;
+ 		double adicionalDifProvincia = !origen.getProvincia().trim().equalsIgnoreCase(destino.getProvincia().trim()) ? costoDifProv : 0;
  		return base + adicionalDistancia + adicionalDifProvincia;
 	}
 }

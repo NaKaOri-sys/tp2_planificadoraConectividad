@@ -84,15 +84,10 @@ public class LocalidadTest {
 	@Test
 	public void testLocalidadMismoNombreDiferenteProvinciaCreaDosElementosEnLista() {
 		Localidad villaMariaCBA = new Localidad("Villa María", "Córdoba", -32.4103, -63.2314);
-		this.localidades.put(villaMariaCBA.getNombre() + " - " + villaMariaCBA.getProvincia(), villaMariaCBA);
+		this.localidades.put(villaMariaCBA.buildKeyLocalidad(), villaMariaCBA);
 		Localidad villaMariaBA = new Localidad("Villa María", "Buenos Aires", -35.0000, -60.0000);
-		this.localidades.put(villaMariaBA.getNombre() + " - " + villaMariaBA.getProvincia(), villaMariaBA);
+		this.localidades.put(villaMariaBA.buildKeyLocalidad(), villaMariaBA);
 		
 		assertEquals(2, this.localidades.size());
 	}
-
-	// TODO Agregar test para localidades con coordenadas iguales pero diferente
-	// nombre
-	// TODO Agregar test para coordenadas en límites válidos (±90.0 latitud, ±180.0
-	// longitud)
 }

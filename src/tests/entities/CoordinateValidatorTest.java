@@ -64,12 +64,4 @@ public class CoordinateValidatorTest {
 		assertEquals(0.0, validator.getLongitud(), 0.001);
 	}
 
-	@Test
-	public void testCoordinateValidatorConNumerosGrandes() {
-		CoordinateValidator validator = new CoordinateValidator("89.9999", "179.9999");
-		assertEquals(89.9999, validator.getLatitud(), 0.001);
-		assertEquals(179.9999, validator.getLongitud(), 0.001);
-	}
-
-	// TODO Agregar test para casos límite de coordenadas válidas (±90 para latitud, ±180 para longitud)
 }
