@@ -1,6 +1,5 @@
 package model.dao;
 
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
@@ -15,7 +14,6 @@ import com.google.gson.reflect.TypeToken;
 import model.entities.Localidad;
 
 public class LocalidadDao {
-	public static final String FILE_PATH = "localidades.json";
 
 	public static void generarJsonLocalidad(String nombreArchivo, Map<String, Localidad> localidades)
 			throws IllegalArgumentException {
@@ -61,8 +59,9 @@ public class LocalidadDao {
 		if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
 			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío.");
 		}
-		try (FileOutputStream stream = new FileOutputStream(nombreArchivo)) {
-			stream.close();
+		try (FileWriter writer = new FileWriter(nombreArchivo)) {
+			writer.write("{}");
+			writer.close();
 		} catch (Exception e) {
 			System.err.println("No se pudo limpiar el archivo JSON, error:" + e.getMessage());
 			throw new RuntimeException(e.getMessage());

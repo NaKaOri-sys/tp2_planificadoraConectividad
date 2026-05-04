@@ -7,15 +7,8 @@ import model.entities.Grafo;
 import model.entities.Localidad;
 
 public class Prim implements IArbolGeneradorMinimo {
-	private Grafo grafo;
 
 	public Prim() {
-
-	}
-
-	public Prim(Grafo g) {
-		validateGrafo(g);
-		this.grafo = g;
 	}
 
 	private void validateGrafo(Grafo g) {
@@ -29,7 +22,8 @@ public class Prim implements IArbolGeneradorMinimo {
 	}
 
 	@Override
-	public Grafo generarAGM() {
+	public Grafo generarAGM(Grafo grafo) {
+		validateGrafo(grafo);
 		Grafo agm = new Grafo();
 		Set<Localidad> visitados = new java.util.HashSet<>();
 		Localidad inicio = grafo.getLocalidades().iterator().next();
@@ -70,9 +64,3 @@ public class Prim implements IArbolGeneradorMinimo {
 		return minima;
 	}
 }
-// TODO Implementar tests unitarios para clase Prim:
-// - Test para generarAGM con grafo de 3 localidades
-// - Test para generarAGM con grafo desconexo (debe retornar árbol parcial)
-// - Test para verificar que el costo del AGM es mínimo
-// - Test para generarAGM con grafo completo (todas las aristas conectadas)
-// - Test para grafo con ciclos (debe generar árbol sin ciclos)

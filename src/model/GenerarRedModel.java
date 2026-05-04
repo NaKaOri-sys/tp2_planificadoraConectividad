@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import model.entities.AGM;
 import model.entities.Conexion;
 import model.entities.CostCalculator;
 import model.entities.DistanceCalculator;
 import model.entities.Grafo;
 import model.entities.Localidad;
 import model.interfaces.IGenerarRed;
-import model.strategy.IArbolGeneradorMinimo;
 
 public class GenerarRedModel implements IGenerarRed {
 
@@ -21,9 +21,9 @@ public class GenerarRedModel implements IGenerarRed {
 	private Grafo grafo;
 	private CostCalculator costCalculator;
 	private DistanceCalculator distanceCalculator;
-	private IArbolGeneradorMinimo agm;
+	private AGM agm;
 	
-	public GenerarRedModel(IArbolGeneradorMinimo agm) {
+	public GenerarRedModel(AGM agm) {
 		this.agm = agm;
 		this.grafo = new Grafo();
 	}
@@ -57,7 +57,7 @@ public class GenerarRedModel implements IGenerarRed {
 	public Grafo generarRed(double costoKM, double recargo, double costoDifProv, Map<String, Localidad> localidades) {
 		initializeClass(costoKM, recargo, costoDifProv, localidades);
 		generarGrafo();
-		return agm.generarAGM();
+		return agm.generarAGM(this.grafo);
 	}
 
 	// TODO Implementar: Métodos para soportar modificación de solución
