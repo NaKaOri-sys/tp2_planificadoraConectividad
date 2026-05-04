@@ -1,17 +1,16 @@
-package model;
+package model.entities;
 
-import model.entities.Grafo;
 import model.strategy.IArbolGeneradorMinimo;
 
 public class AGM {
 
 	private IArbolGeneradorMinimo agm;
-
+	
 	public void setAGM(IArbolGeneradorMinimo agm) {
 		this.agm = agm;
 	}
 
-	public Grafo generarAGM() {
-		return this.agm.generarAGM();
+	public Grafo generarAGM(Grafo g) {
+		return this.agm.generarAGM(g);
 	}
 }

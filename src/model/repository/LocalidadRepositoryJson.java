@@ -6,11 +6,15 @@ import model.dao.LocalidadDao;
 import model.entities.Localidad;
 
 public class LocalidadRepositoryJson implements ILocalidadRepository {
+	private String FILE_PATH;
+	public LocalidadRepositoryJson(String FILE_PATH) {
+		this.FILE_PATH = FILE_PATH;
+	}
 	
 	@Override
 	public Map<String, Localidad> loadAll() {
 		try {
-			return LocalidadDao.cargarDesdeJson(LocalidadDao.FILE_PATH);
+			return LocalidadDao.cargarDesdeJson(this.FILE_PATH);
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
@@ -19,7 +23,7 @@ public class LocalidadRepositoryJson implements ILocalidadRepository {
 	@Override
 	public void saveAll(Map<String, Localidad> localidades) {
 		try {
-			LocalidadDao.generarJsonLocalidad(LocalidadDao.FILE_PATH, localidades);
+			LocalidadDao.generarJsonLocalidad(this.FILE_PATH, localidades);
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
@@ -28,7 +32,7 @@ public class LocalidadRepositoryJson implements ILocalidadRepository {
 	@Override
 	public void cleanAll() {
 		try {
-			LocalidadDao.limpiarArchivoJson(LocalidadDao.FILE_PATH);
+			LocalidadDao.limpiarArchivoJson(this.FILE_PATH);
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}

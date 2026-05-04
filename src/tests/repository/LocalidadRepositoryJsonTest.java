@@ -21,7 +21,7 @@ public class LocalidadRepositoryJsonTest {
 
 	@Before
 	public void setUp() throws Exception {
-		repository = new LocalidadRepositoryJson();
+		repository = new LocalidadRepositoryJson(TEST_FILE);
 		File testFile = new File(TEST_FILE);
 		if (testFile.exists()) {
 			testFile.delete();
@@ -62,7 +62,7 @@ public class LocalidadRepositoryJsonTest {
 		repository.cleanAll();
 		
 		Map<String, Localidad> vacias = repository.loadAll();
-		assertNull("Después de limpiar debe estar vacío", vacias);
+		assertNotNull("Después de limpiar debe estar vacío, no nulo", vacias);
 	}
 
 	@Test
@@ -78,7 +78,7 @@ public class LocalidadRepositoryJsonTest {
 		
 		repository.saveAll(datosOriginales);
 		
-		LocalidadRepositoryJson repositorioNuevo = new LocalidadRepositoryJson();
+		LocalidadRepositoryJson repositorioNuevo = new LocalidadRepositoryJson(TEST_FILE);
 		Map<String, Localidad> datosCargados = repositorioNuevo.loadAll();
 		
 		assertEquals("Debe cargar 3 localidades", 3, datosCargados.size());
@@ -88,7 +88,7 @@ public class LocalidadRepositoryJsonTest {
 	public void testLoadAllConMapaVacio() {
 		repository.cleanAll();
 		Map<String, Localidad> vacio = repository.loadAll();
-		assertNull("No debe retornar null", vacio);
+		assertNotNull("No debe retornar null", vacio);
 	}
 
 }
