@@ -38,6 +38,16 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 		notifyObservers(observer -> observer.onLocalidadDeleted(this.localidades));
 	}
 	
+	public void actualizarLocalidad(String nombreLocalidad, double newLat, double newLong) {
+		Localidad localidad = this.localidades.get(nombreLocalidad);
+		if(localidad != null) {
+			localidad.setLatitud(newLat);
+			localidad.setLongitud(newLong);
+		
+			notifyObservers(observer -> observer.onLocalidadCreated(this.localidades));
+		}
+	}
+	
 	public Map<String, Localidad> getLocalidades() {
 		return localidades;
 	}

@@ -39,6 +39,15 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	public void mostrarParaEditar(String nombreLocalidad) {
 		// TODO Implementar: Obtener localidad del modelo, rellenar formulario, mostrar diálogo
 		// Debe permitir editar solo coordenadas (latitud/longitud)
+		Localidad localidad = localidadModel.getLocalidades().get(nombreLocalidad);
+		if(localidad != null) {
+			this.localidadDialog.cargarDatosParaEditar(localidad.getNombre(),
+												localidad.getProvincia(),
+												String.valueOf(localidad.getLatitud()),
+												String.valueOf(localidad.getLongitud()));
+			this.localidadDialog.setVisible(true);
+			this.localidadDialog.modoEdicion(true);
+		}
 	}
 
 	/**
@@ -57,13 +66,18 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 
 	@Override
 	public void onInputLocalidad(LocalidadDto localidadDto) {
-		try {
-			CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
+		if(this.localidadModel.getLocalidades().containsKey(localidadDto.getNombre())) {
+			actualizarLocalidad(localidadDto);
+		} else {
+			
+			try {
+				CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
 					localidadDto.getLongitud());
-			this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(),
+				this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(),
 					coordenadas.getLatitud(), coordenadas.getLongitud());
-		} catch (NumberFormatException e) {
-			this.localidadDialog.mostrarError(e.getMessage());
+			} catch (NumberFormatException e) {
+				this.localidadDialog.mostrarError(e.getMessage());
+			}
 		}
 	}
 
@@ -76,6 +90,16 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	private void actualizarLocalidad(LocalidadDto localidadDto) {
 		// TODO Implementar: Buscar localidad en modelo, actualizar coordenadas, guardar cambios
 		// Nota: Actualmente no existe un método updateLocalidad en LocalidadModel, debe crearse
+		try {
+			CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
+					localidadDto.getLongitud());
+			this.localidadModel.actualizarLocalidad(localidadDto.getNombre(), coordenadas.getLatitud(), coordenadas.getLongitud());
+			this.localidadDialog.modoEdicion(false);
+			this.localidadDialog.setVisible(false);
+			
+		} catch (NumberFormatException e) {
+			this.localidadDialog.mostrarError(e.getMessage());
+		}
 	}
 
 	/**

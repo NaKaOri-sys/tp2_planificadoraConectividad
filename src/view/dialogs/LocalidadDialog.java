@@ -125,7 +125,23 @@ public class LocalidadDialog extends JDialog {
 
 		return new LocalidadDto(nombre, provincia, latitudStr, longitudStr);
 	}
-
+	
+	public void cargarDatosParaEditar(String localidad, String provincia, String latitud, String longitud) {
+		txtLocalidad.setText(localidad);
+		txtProvincia.setText(provincia);
+		txtLatitud.setText(latitud);
+		txtLongitud.setText(longitud);
+		
+		txtLocalidad.setEditable(false);
+		
+	}
+	
+	public void modoEdicion(boolean activar) {
+		txtLocalidad.setEditable(!activar);
+		txtProvincia.setEditable(!activar);
+		
+	}
+	
 	public void mostrarError(String mensaje) {
 		JOptionPane.showMessageDialog(this, mensaje, "Error de Validación", JOptionPane.ERROR_MESSAGE);
 	}
