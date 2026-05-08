@@ -34,10 +34,10 @@ public class LocalidadModel extends Observable<ILocalidadObserver> implements Se
 	}
 
 	public void eliminarLocalidad(Localidad localidad) {
-		this.localidades.remove(localidad.getNombre());
+		this.localidades.remove(localidad.buildKeyLocalidad());
 		notifyObservers(observer -> observer.onLocalidadDeleted(this.localidades));
 	}
-
+	
 	public Map<String, Localidad> getLocalidades() {
 		return localidades;
 	}

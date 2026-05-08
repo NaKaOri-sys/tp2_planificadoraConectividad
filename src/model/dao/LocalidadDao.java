@@ -37,7 +37,7 @@ public class LocalidadDao {
 		}
 	}
 
-	public static LinkedHashMap<String, Localidad> cargarDesdeJson(String nombreArchivo) {
+	public static Map<String, Localidad> cargarDesdeJson(String nombreArchivo) {
 		if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
 			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío.");
 		}
@@ -46,7 +46,7 @@ public class LocalidadDao {
 		try (Reader reader = new FileReader(nombreArchivo)) {
 			Type localidadesType = new TypeToken<Map<String, Localidad>>() {
 			}.getType();
-			LinkedHashMap<String, Localidad> localidades = gson.fromJson(reader, localidadesType);
+			Map<String, Localidad> localidades = gson.fromJson(reader, localidadesType);
 			reader.close();
 			return localidades;
 		} catch (Exception e) {

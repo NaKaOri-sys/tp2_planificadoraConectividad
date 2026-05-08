@@ -4,6 +4,7 @@ import events.ILocalidadListener;
 import model.LocalidadModel;
 import model.dtos.LocalidadDto;
 import model.entities.CoordinateValidator;
+import model.entities.Localidad;
 import view.dialogs.LocalidadDialog;
 
 /**
@@ -46,8 +47,12 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * @param nombreLocalidad Nombre de la localidad a eliminar
 	 */
 	public void eliminar(String nombreLocalidad) {
-		// TODO Implementar: Obtener localidad del modelo, llamar a eliminarLocalidad(), guardar cambios
-		// El modelo dispara onLocalidadDeleted que hace saveToJson() automáticamente
+		Localidad localidad = localidadModel.getLocalidades().get(nombreLocalidad);
+		if (localidad != null) {
+			localidadModel.eliminarLocalidad(localidad);
+		} else {
+			this.localidadDialog.mostrarError("No se encontró la localidad: " + nombreLocalidad);
+		}
 	}
 
 	@Override
