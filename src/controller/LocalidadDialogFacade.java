@@ -88,8 +88,6 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * @param localidadDto Nuevos datos de la localidad
 	 */
 	private void actualizarLocalidad(LocalidadDto localidadDto) {
-		// TODO Implementar: Buscar localidad en modelo, actualizar coordenadas, guardar cambios
-		// Nota: Actualmente no existe un método updateLocalidad en LocalidadModel, debe crearse
 		try {
 			CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
 					localidadDto.getLongitud());
