@@ -21,6 +21,7 @@ public class LocalidadIntegrationController implements ILocalidadObserver{
 	    @Override
 	    public void onLocalidadCreated(Map<String, Localidad> localidades) {
 	        view.actualizarLocalidades(localidades.keySet());
+	        view.limpiarMapa();
 	        dibujarLocalidadesEnMapa(localidades);
 	    }
 	    

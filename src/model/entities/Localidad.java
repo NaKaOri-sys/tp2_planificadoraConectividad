@@ -67,7 +67,15 @@ public class Localidad implements Serializable {
 	public double getLongitud() {
 		return longitud;
 	}
-
+	
+	public void setLatitud(double latitud) {
+		this.latitud = latitud;
+	}
+	
+	public void setLongitud(double longitud) {
+		this.longitud = longitud;
+	}
+	
 	public String buildKeyLocalidad() {
 		return this.getNombre() + " - " + this.getProvincia();
 	}

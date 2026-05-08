@@ -4,6 +4,7 @@ import events.ILocalidadListener;
 import model.LocalidadModel;
 import model.dtos.LocalidadDto;
 import model.entities.CoordinateValidator;
+import model.entities.Localidad;
 import view.dialogs.LocalidadDialog;
 
 /**
@@ -38,6 +39,15 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	public void mostrarParaEditar(String nombreLocalidad) {
 		// TODO Implementar: Obtener localidad del modelo, rellenar formulario, mostrar diálogo
 		// Debe permitir editar solo coordenadas (latitud/longitud)
+		Localidad localidad = localidadModel.getLocalidades().get(nombreLocalidad);
+		if(localidad != null) {
+			this.localidadDialog.cargarDatosParaEditar(localidad.getNombre(),
+												localidad.getProvincia(),
+												String.valueOf(localidad.getLatitud()),
+												String.valueOf(localidad.getLongitud()));
+			this.localidadDialog.setVisible(true);
+			this.localidadDialog.modoEdicion(true);
+		}
 	}
 
 	/**
@@ -46,19 +56,28 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * @param nombreLocalidad Nombre de la localidad a eliminar
 	 */
 	public void eliminar(String nombreLocalidad) {
-		// TODO Implementar: Obtener localidad del modelo, llamar a eliminarLocalidad(), guardar cambios
-		// El modelo dispara onLocalidadDeleted que hace saveToJson() automáticamente
+		Localidad localidad = localidadModel.getLocalidades().get(nombreLocalidad);
+		if (localidad != null) {
+			localidadModel.eliminarLocalidad(localidad);
+		} else {
+			this.localidadDialog.mostrarError("No se encontró la localidad: " + nombreLocalidad);
+		}
 	}
 
 	@Override
 	public void onInputLocalidad(LocalidadDto localidadDto) {
-		try {
-			CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
+		if(this.localidadModel.getLocalidades().containsKey(localidadDto.getNombre())) {
+			actualizarLocalidad(localidadDto);
+		} else {
+			
+			try {
+				CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
 					localidadDto.getLongitud());
-			this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(),
+				this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(),
 					coordenadas.getLatitud(), coordenadas.getLongitud());
-		} catch (NumberFormatException e) {
-			this.localidadDialog.mostrarError(e.getMessage());
+			} catch (NumberFormatException e) {
+				this.localidadDialog.mostrarError(e.getMessage());
+			}
 		}
 	}
 
@@ -69,8 +88,16 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * @param localidadDto Nuevos datos de la localidad
 	 */
 	private void actualizarLocalidad(LocalidadDto localidadDto) {
-		// TODO Implementar: Buscar localidad en modelo, actualizar coordenadas, guardar cambios
-		// Nota: Actualmente no existe un método updateLocalidad en LocalidadModel, debe crearse
+		try {
+			CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
+					localidadDto.getLongitud());
+			this.localidadModel.actualizarLocalidad(localidadDto.getNombre(), coordenadas.getLatitud(), coordenadas.getLongitud());
+			this.localidadDialog.modoEdicion(false);
+			this.localidadDialog.setVisible(false);
+			
+		} catch (NumberFormatException e) {
+			this.localidadDialog.mostrarError(e.getMessage());
+		}
 	}
 
 	/**
