@@ -40,6 +40,7 @@ public class MapaView extends JFrame {
 	private JList<String> list;
 	private Observable<IMapaListener> observable;
 	private JLabel lblCostoTotal;
+	private JButton btnEditSolucion;
 
 	public MapaView() {
 		observable = new Observable<>();
@@ -67,15 +68,25 @@ public class MapaView extends JFrame {
 		});
 		panel.add(btnAddLocalidad);
 
-		JButton btnCalcular = new JButton("Generar Red");
+		JButton btnCalcular = new JButton("Calcular");
 		btnCalcular.setToolTipText("Generar la red de conexiones entre localidades y mostrar el costo total");
 		btnCalcular.setFont(new Font("SansSerif", Font.BOLD, 14));
-		btnCalcular.setBounds(10, 481, 142, 42);
+		btnCalcular.setBounds(10, 459, 111, 42);
 		btnCalcular.addActionListener(a -> {
 			observable.notifyObservers(o -> o.onCalcular());
 		});
 		panel.add(btnCalcular);
-
+		
+		btnEditSolucion = new JButton("Editar");
+		btnEditSolucion.setEnabled(false);
+		btnEditSolucion.setToolTipText("Permite modificar la solución ofrecida al calcular las conexiones.");
+		btnEditSolucion.setFont(new Font("SansSerif", Font.BOLD, 14));
+		btnEditSolucion.setBounds(159, 459, 111, 42);
+		btnEditSolucion.addActionListener(a -> {
+			observable.notifyObservers(o -> o.onEditSolucion());
+		});
+		panel.add(btnEditSolucion);
+		
 		JButton btnCleanMapa = new JButton("Limpiar Mapa");
 		btnCleanMapa.setToolTipText("Limpiar el mapa de localidades y conexiones");
 		btnCleanMapa.setFont(new Font("SansSerif", Font.BOLD, 10));
@@ -86,7 +97,7 @@ public class MapaView extends JFrame {
 		panel.add(btnCleanMapa);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 249, 142, 198);
+		scrollPane.setBounds(10, 232, 142, 198);
 		panel.add(scrollPane);
 
 		list = new JList<>();
@@ -103,7 +114,7 @@ public class MapaView extends JFrame {
 		JLabel lblNewLabel = new JLabel("Localidades");
 		lblNewLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(36, 211, 85, 42);
+		lblNewLabel.setBounds(36, 197, 85, 42);
 		panel.add(lblNewLabel);
 
 		txtCostoKm = new JTextField();
@@ -149,12 +160,10 @@ public class MapaView extends JFrame {
 		JButton btnUpdateLocalidad = new JButton("Actualizar");
 		btnUpdateLocalidad.setToolTipText("Actualizar la información de una localidad seleccionada en la lista");
 		btnUpdateLocalidad.setFont(new Font("SansSerif", Font.BOLD, 10));
-		btnUpdateLocalidad.setBounds(162, 300, 85, 42);
+		btnUpdateLocalidad.setBounds(162, 276, 85, 42);
 		btnUpdateLocalidad.addActionListener(a -> {
 			String nombreLocalidad = list.getSelectedValue();
-			if (nombreLocalidad != null) {
-				observable.notifyObservers(o -> o.onActualizarLocalidad(nombreLocalidad));
-			}
+			observable.notifyObservers(o -> o.onActualizarLocalidad(nombreLocalidad));
 		});
 		panel.add(btnUpdateLocalidad);
 
@@ -163,34 +172,25 @@ public class MapaView extends JFrame {
 		btnDeleteLocalidad.setFont(new Font("SansSerif", Font.BOLD, 10));
 		btnDeleteLocalidad.addActionListener(a -> {
 			String nombreLocalidad = list.getSelectedValue();
-			if (nombreLocalidad != null) {
 				observable.notifyObservers(o -> o.onEliminarLocalidad(nombreLocalidad));
-			}
 		});
-		btnDeleteLocalidad.setBounds(162, 352, 85, 42);
+		btnDeleteLocalidad.setBounds(162, 324, 85, 42);
 		panel.add(btnDeleteLocalidad);
 
 		lblCostoTotal = new JLabel("$0");
 		lblCostoTotal.setFont(new Font("SansSerif", Font.BOLD, 14));
-		lblCostoTotal.setBounds(162, 481, 79, 42);
+		lblCostoTotal.setBounds(105, 511, 175, 42);
 		panel.add(lblCostoTotal);
 
 		JLabel lblCostoTotalTitle = new JLabel("Costo Total");
 		lblCostoTotalTitle.setFont(new Font("SansSerif", Font.BOLD, 14));
-		lblCostoTotalTitle.setBounds(162, 458, 85, 42);
+		lblCostoTotalTitle.setBounds(10, 511, 85, 42);
 		panel.add(lblCostoTotalTitle);
 
 		JLabel lblConfiguraciones = new JLabel("Configuraciones");
 		lblConfiguraciones.setFont(new Font("SansSerif", Font.BOLD, 14));
 		lblConfiguraciones.setBounds(36, 70, 176, 22);
 		panel.add(lblConfiguraciones);
-		
-		// TODO Implementar: Agregar botón para "Modificar Solución"
-		// Este botón debería permitir:
-		// - Seleccionar una conexión en el mapa
-		// - Mostrar alternativas posibles para reemplazarla
-		// - Calcular el nuevo costo total
-		// - Permitir aplicar o rechazar el cambio
 	}
 
 	public void hacerFocoEnLocalidadSeleccionada(LocalidadDto dto) {
@@ -247,9 +247,10 @@ public class MapaView extends JFrame {
 		total = total.setScale(2, RoundingMode.HALF_UP);
 		lblCostoTotal.setText("$" + total);
 	}
-	
+
 	public ConfigurationDto obtenerConfigurables() {
-		ConfigurationDto dto = new ConfigurationDto(this.txtCostoKm.getText(), this.txtRecargo.getText(), this.txtCostoDifProv.getText());	
+		ConfigurationDto dto = new ConfigurationDto(this.txtCostoKm.getText(), this.txtRecargo.getText(),
+				this.txtCostoDifProv.getText());
 		return dto;
 	}
 
@@ -261,5 +262,9 @@ public class MapaView extends JFrame {
 		mapa.removeMapMarker(primerVertice);
 		primerVertice.setBackColor(Color.red);
 		mapa.addMapMarker(primerVertice);
+	}
+
+	public void mostrarEditar(boolean mostrar) {
+		this.btnEditSolucion.setEnabled(mostrar);
 	}
 }

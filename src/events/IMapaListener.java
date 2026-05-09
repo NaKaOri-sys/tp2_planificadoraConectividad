@@ -35,4 +35,9 @@ public interface IMapaListener {
 	 * @param nombreLocalidad El nombre de la localidad a actualizar.
 	 **/
 	void onActualizarLocalidad(String nombreLocalidad);
+	
+	/**
+	 * Evento que se dispara cuando el usuario hace clic en el botón "Editar" en la vista del mapa.
+	 **/
+	void onEditSolucion();
 }

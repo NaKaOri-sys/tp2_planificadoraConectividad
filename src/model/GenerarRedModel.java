@@ -64,7 +64,10 @@ public class GenerarRedModel implements IGenerarRed {
 	// - calcularCostoSiSeReemplazaConexion(Conexion actual, Conexion reemplazo): double
 	// - verificarValidezDeLaSolucion(): boolean (asegurar que sigue siendo un árbol válido)
 	// - obtenerAlternativasDeConexion(Conexion conexionAReemplazar): List<Conexion>
-
+	
+	public Grafo obtenerGrafoCompleto() {
+		return this.grafo;
+	}
 
 	private void initializeClass(double costoKM, double recargo, double costoDifProv,
 			Map<String, Localidad> localidades) {

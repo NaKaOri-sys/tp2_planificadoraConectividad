@@ -26,6 +26,7 @@ public class MapaStateController implements IMapaObserver {
 			this.view.dibujarConexion(origen, destino, conexion.getCosto());
 		});
 		this.view.actualizarTotal(red.calcularCostoTotal());
+		this.view.mostrarEditar(true);
 	}
 
 	@Override

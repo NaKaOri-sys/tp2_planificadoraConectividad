@@ -11,12 +11,14 @@ import javax.swing.border.EmptyBorder;
 import events.ILocalidadListener;
 import model.dtos.LocalidadDto;
 import util.Observable;
+import view.MapaView;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Frame;
 
 public class LocalidadDialog extends JDialog {
 
@@ -32,10 +34,11 @@ public class LocalidadDialog extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param mapaView 
 	 */
-	public LocalidadDialog() {
+	public LocalidadDialog(Frame padre) {
+		super(padre, "Agregar Localidad", true);
 		this.observable = new Observable<>();
-		setTitle("Agregar Localidad");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
