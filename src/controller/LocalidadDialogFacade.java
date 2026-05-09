@@ -37,17 +37,15 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * @param nombreLocalidad Nombre de la localidad a editar
 	 */
 	public void mostrarParaEditar(String nombreLocalidad) {
-		// TODO Implementar: Obtener localidad del modelo, rellenar formulario, mostrar diálogo
-		// Debe permitir editar solo coordenadas (latitud/longitud)
 		Localidad localidad = localidadModel.getLocalidades().get(nombreLocalidad);
-		if(localidad != null) {
-			this.localidadDialog.cargarDatosParaEditar(localidad.getNombre(),
-												localidad.getProvincia(),
-												String.valueOf(localidad.getLatitud()),
-												String.valueOf(localidad.getLongitud()));
-			this.localidadDialog.setVisible(true);
-			this.localidadDialog.modoEdicion(true);
+		if (localidad == null) {
+			this.localidadDialog.mostrarError("Se debe seleccionar una localidad en la lista.");
+			return;
 		}
+		this.localidadDialog.modoEdicion(true);
+		this.localidadDialog.cargarDatosParaEditar(localidad.getNombre(), localidad.getProvincia(),
+				String.valueOf(localidad.getLatitud()), String.valueOf(localidad.getLongitud()));
+		this.localidadDialog.setVisible(true);
 	}
 
 	/**
@@ -57,27 +55,26 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 */
 	public void eliminar(String nombreLocalidad) {
 		Localidad localidad = localidadModel.getLocalidades().get(nombreLocalidad);
-		if (localidad != null) {
-			localidadModel.eliminarLocalidad(localidad);
-		} else {
+		if (localidad == null) {
 			this.localidadDialog.mostrarError("No se encontró la localidad: " + nombreLocalidad);
+			return;
 		}
+		localidadModel.eliminarLocalidad(localidad);
 	}
 
 	@Override
 	public void onInputLocalidad(LocalidadDto localidadDto) {
-		if(this.localidadModel.getLocalidades().containsKey(localidadDto.getNombre())) {
+		if (this.localidadModel.getLocalidades().containsKey(localidadDto.getNombre())) {
 			actualizarLocalidad(localidadDto);
-		} else {
-			
-			try {
-				CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
+			return;
+		}
+		try {
+			CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
 					localidadDto.getLongitud());
-				this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(),
+			this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(),
 					coordenadas.getLatitud(), coordenadas.getLongitud());
-			} catch (NumberFormatException e) {
-				this.localidadDialog.mostrarError(e.getMessage());
-			}
+		} catch (NumberFormatException e) {
+			this.localidadDialog.mostrarError(e.getMessage());
 		}
 	}
 
@@ -91,10 +88,11 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 		try {
 			CoordinateValidator coordenadas = new CoordinateValidator(localidadDto.getLatitud(),
 					localidadDto.getLongitud());
-			this.localidadModel.actualizarLocalidad(localidadDto.getNombre(), coordenadas.getLatitud(), coordenadas.getLongitud());
-			this.localidadDialog.modoEdicion(false);
+			this.localidadModel.actualizarLocalidad(localidadDto.getNombre(), coordenadas.getLatitud(),
+					coordenadas.getLongitud());
 			this.localidadDialog.setVisible(false);
-			
+			this.localidadDialog.modoEdicion(false);
+
 		} catch (NumberFormatException e) {
 			this.localidadDialog.mostrarError(e.getMessage());
 		}
@@ -104,7 +102,6 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 	 * Limpia los campos del formulario en el diálogo.
 	 */
 	private void limpiarFormulario() {
-		// Esto requeriría agregar métodos en LocalidadDialog para acceder y limpiar los
-		// campos
+		this.localidadDialog.limpiarFormulario();
 	}
 }

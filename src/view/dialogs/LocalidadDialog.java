@@ -130,16 +130,21 @@ public class LocalidadDialog extends JDialog {
 		txtLocalidad.setText(localidad);
 		txtProvincia.setText(provincia);
 		txtLatitud.setText(latitud);
-		txtLongitud.setText(longitud);
+		txtLongitud.setText(longitud);	
+	}
+	
+	public void limpiarFormulario() {
+		txtLocalidad.setText("");
+		txtProvincia.setText("");
+		txtLatitud.setText("");
+		txtLongitud.setText("");
 		
-		txtLocalidad.setEditable(false);
-		
+		modoEdicion(false);
 	}
 	
 	public void modoEdicion(boolean activar) {
 		txtLocalidad.setEditable(!activar);
 		txtProvincia.setEditable(!activar);
-		
 	}
 	
 	public void mostrarError(String mensaje) {
