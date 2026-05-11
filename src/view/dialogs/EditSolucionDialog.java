@@ -37,10 +37,10 @@ public class EditSolucionDialog extends JDialog {
 		comboDestino = new JComboBox<>();
 		btnAgregar = new JButton("Conectar Localidades");
 		btnAgregar.addActionListener(e -> {
-			LocalidadDto origen = (LocalidadDto) comboOrigen.getSelectedItem();
-			LocalidadDto destino = (LocalidadDto) comboDestino.getSelectedItem();
+			String origen = comboOrigen.getSelectedItem().toString();
+			String destino = comboDestino.getSelectedItem().toString();
 			if (origen != null && destino != null) {
-				observable.notifyObservers(listener -> listener.onAgregarConexion(origen.getNombre(),destino.getNombre()));
+				observable.notifyObservers(listener -> listener.onAgregarConexion(origen, destino));
 			}
 		});
 

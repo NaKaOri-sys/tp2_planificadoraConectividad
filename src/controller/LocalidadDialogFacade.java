@@ -73,7 +73,7 @@ public class LocalidadDialogFacade implements ILocalidadListener {
 					localidadDto.getLongitud());
 			this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(),
 					coordenadas.getLatitud(), coordenadas.getLongitud());
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			this.localidadDialog.mostrarError(e.getMessage());
 		}
 	}

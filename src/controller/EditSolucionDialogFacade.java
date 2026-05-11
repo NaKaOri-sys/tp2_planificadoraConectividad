@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 import events.IEditSolucionListener;
@@ -15,84 +16,87 @@ public class EditSolucionDialogFacade implements IEditSolucionListener {
 	private EditSolucionDialog editSolucionDialog;
 	private MapaModel mapaModel;
 	private Map<String, Localidad> localidades;
-	
-	public EditSolucionDialogFacade(EditSolucionDialog editSolucionDialog,MapaModel mapaModel, Map<String, Localidad> localidades) {
+
+	public EditSolucionDialogFacade(EditSolucionDialog editSolucionDialog, MapaModel mapaModel,
+			Map<String, Localidad> localidades) {
 		this.editSolucionDialog = editSolucionDialog;
 		this.mapaModel = mapaModel;
 		this.localidades = localidades;
 		this.editSolucionDialog.obtenerObserver().addObserver(this);
 	}
+
 	public void mostrar() {
 		ArrayList<LocalidadDto> localidadDto = new ArrayList<>();
-		for(Localidad localidad : localidades.values()) {
+		for (Localidad localidad : localidades.values()) {
 			localidadDto.add(localidad.toDto());
 		}
 		this.editSolucionDialog.cargarLocalidades(localidadDto);
 		actualizarListaVisual();
 		this.editSolucionDialog.setVisible(true);
 	}
-	
+
 	private void actualizarListaVisual() {
-		if(mapaModel.getAgmActual() != null) {
+		if (mapaModel.getAgmActual() != null) {
 			ArrayList<ConexionDto> conexionesDto = new ArrayList<>();
-			for(Conexion conexion : mapaModel.getAgmActual().getTodasLasConexiones()) {
+			for (Conexion conexion : mapaModel.getAgmActual().getTodasLasConexiones()) {
 				conexionesDto.add(conexion.toDto());
 			}
 			this.editSolucionDialog.actualizarListaConexiones(conexionesDto);
 		}
 	}
-	
+
 	@Override
 	public void onAgregarConexion(String nombreOrigen, String nombreDestino) {
-		if(nombreOrigen.equals(nombreDestino)) {
+		if (nombreOrigen.equals(nombreDestino)) {
 			this.editSolucionDialog.mostrarError("No se puede conectar una localidad consigo misma.");
 			return;
 		}
-		Localidad origen = null;
-		Localidad destino = null;
-		for(Localidad localidad : localidades.values()) {
-			if(localidad.getNombre().equals(nombreOrigen)) {
-				origen = localidad;
-			}
-			if(localidad.getNombre().equals(nombreDestino)) {
-				destino = localidad;
-			}
-		}
-		
-		if(origen != null && destino != null) {
-			Conexion nuevaConexion = this.mapaModel.crearConexion(origen, destino);
-			
-			this.mapaModel.modificarSolucion(null, nuevaConexion);
-			this.actualizarListaVisual();
-		}else {
+		Localidad origen = localidades.get(nombreOrigen);
+		Localidad destino = localidades.get(nombreDestino);
+		if (origen == null || destino == null) {
 			this.editSolucionDialog.mostrarError("No se encontraron las localidades seleccionadas.");
+			return;
 		}
+
+		Conexion nuevaConexion = this.mapaModel.crearConexion(origen, destino);
+
+		this.mapaModel.modificarSolucion(null, nuevaConexion);
+		this.actualizarListaVisual();
 	}
-	
+
 	@Override
 	public void onEliminarConexion(ConexionDto conexionAEliminar) {
-		if(this.mapaModel.getAgmActual() == null) {
+		if (this.mapaModel.getAgmActual() == null) {
 			this.editSolucionDialog.mostrarError("No hay una red generada para modificar.");
 			return;
 		}
+		if (this.mapaModel.getAgmActual().getTodasLasConexiones().size() == 1) {
+			this.editSolucionDialog.mostrarError("No se puede eliminar la única conexión de la solución.");
+			return;
+		}
+		Conexion aBorrar = encontrarConexion(conexionAEliminar);
 		
-		Conexion aBorrar = null;
-		Conexion aAgregar = null;
-		
-		for(Conexion conexion : this.mapaModel.getAgmActual().getTodasLasConexiones()) {
-			if(conexion.getOrigen().getNombre().equals(conexionAEliminar.getOrigen()) && 
-					conexion.getDestino().getNombre().equals(conexionAEliminar.getDestino())) {
-				aBorrar = conexion;
-				break;
+		if (aBorrar == null) {
+			this.editSolucionDialog.mostrarError("No se encontró la conexión a eliminar.");
+			return;
+		}
+
+		this.mapaModel.modificarSolucion(aBorrar, null);
+		this.actualizarListaVisual();
+	}
+
+	private Conexion encontrarConexion(ConexionDto conexionDto) {
+		for (Conexion conexion : this.mapaModel.getAgmActual().getTodasLasConexiones()) {
+			if (sonLasMismasConexiones(conexion, conexionDto)) {
+				return conexion;
 			}
 		}
-		
-		if(aBorrar == null) {
-			this.editSolucionDialog.mostrarError("No se encontró la conexión a eliminar.");
-		}
-		
-		this.mapaModel.modificarSolucion(aBorrar, aAgregar);
-		this.actualizarListaVisual();
+		return null;
+	}
+
+	private boolean sonLasMismasConexiones(Conexion conexion, ConexionDto conexionDto) {
+		return conexion.getOrigen().getNombre().equals(conexionDto.getOrigen())
+				&& conexion.getDestino().getNombre().equals(conexionDto.getDestino());
 	}
 
 	@Override
