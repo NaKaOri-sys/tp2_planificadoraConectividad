@@ -30,6 +30,6 @@ public class LocalidadDto {
 	}
 	@Override
 	public String toString() {
-		return this.nombre + "-" + this.provincia;
+		return this.nombre + " - " + this.provincia;
 	}
 }

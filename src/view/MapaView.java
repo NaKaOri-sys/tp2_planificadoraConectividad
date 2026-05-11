@@ -21,6 +21,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+
 import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -141,6 +144,10 @@ public class MapaView extends JFrame {
 		txtCostoDifProv.setBounds(126, 123, 96, 18);
 		panel.add(txtCostoDifProv);
 		txtCostoDifProv.setColumns(10);
+		
+		configurarSeleccionAutomatica(txtCostoDifProv);
+		configurarSeleccionAutomatica(txtCostoKm);
+		configurarSeleccionAutomatica(txtRecargo);
 
 		JLabel lblCostoXKm = new JLabel("Costo por KM ($)");
 		lblCostoXKm.setFont(new Font("SansSerif", Font.PLAIN, 12));
@@ -164,6 +171,8 @@ public class MapaView extends JFrame {
 		btnUpdateLocalidad.addActionListener(a -> {
 			String nombreLocalidad = list.getSelectedValue();
 			observable.notifyObservers(o -> o.onActualizarLocalidad(nombreLocalidad));
+			actualizarTotal(0.00);
+			limpiarConexiones();
 		});
 		panel.add(btnUpdateLocalidad);
 
@@ -173,6 +182,8 @@ public class MapaView extends JFrame {
 		btnDeleteLocalidad.addActionListener(a -> {
 			String nombreLocalidad = list.getSelectedValue();
 				observable.notifyObservers(o -> o.onEliminarLocalidad(nombreLocalidad));
+				actualizarTotal(0.00);
+				limpiarConexiones();
 		});
 		btnDeleteLocalidad.setBounds(162, 324, 85, 42);
 		panel.add(btnDeleteLocalidad);
@@ -266,5 +277,19 @@ public class MapaView extends JFrame {
 
 	public void mostrarEditar(boolean mostrar) {
 		this.btnEditSolucion.setEnabled(mostrar);
+	}
+	private void configurarSeleccionAutomatica(JTextField campo) {
+	    campo.addFocusListener(new FocusAdapter() {
+	        @Override
+	        public void focusGained(FocusEvent evt) {
+	            campo.selectAll();
+	        }
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            if (campo.getText().isEmpty()) {
+	                campo.setText("0");
+	            }
+	        }
+	    });
 	}
 }
