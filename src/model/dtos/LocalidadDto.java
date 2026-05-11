@@ -28,4 +28,8 @@ public class LocalidadDto {
 	public String getLongitud() {
 		return longitud;
 	}
+	@Override
+	public String toString() {
+		return this.nombre + "-" + this.provincia;
+	}
 }

@@ -25,6 +25,7 @@ public class EditSolucionDialog extends JDialog {
 		super(padre, "Modificar Solución de Red", true);
 		getContentPane().setLayout(new BorderLayout(10, 10));
 		setSize(500, 400);
+		this.observable = new Observable<>();
 		inicializarComponentes();
 	}
 
@@ -36,7 +37,11 @@ public class EditSolucionDialog extends JDialog {
 		comboDestino = new JComboBox<>();
 		btnAgregar = new JButton("Conectar Localidades");
 		btnAgregar.addActionListener(e -> {
-
+			LocalidadDto origen = (LocalidadDto) comboOrigen.getSelectedItem();
+			LocalidadDto destino = (LocalidadDto) comboDestino.getSelectedItem();
+			if (origen != null && destino != null) {
+				observable.notifyObservers(listener -> listener.onAgregarConexion(origen.getNombre(),destino.getNombre()));
+			}
 		});
 
 		panelAgregar.add(new JLabel("Localidad Origen:"));
@@ -55,7 +60,12 @@ public class EditSolucionDialog extends JDialog {
 
 		btnEliminar = new JButton("Eliminar Conexión Seleccionada");
 		btnEliminar.addActionListener(e -> {
-			//TODO metodo para esto
+			ConexionDto seleccionada = listaConexiones.getSelectedValue();
+			if (seleccionada != null) {
+				observable.notifyObservers(o -> o.onEliminarConexion(seleccionada));
+			}else {
+				mostrarError("Debe seleccionar una conexión para eliminar.");
+			}
 		});
 		btnEliminar.setForeground(Color.RED);
 
@@ -64,7 +74,7 @@ public class EditSolucionDialog extends JDialog {
 
 		btnFinalizar = new JButton("Finalizar Edición");
 		btnFinalizar.addActionListener(e -> {
-			//TODO metodo
+			this.observable.notifyObservers(o -> o.onFinalizarEdicion());
 		});
 
 		getContentPane().add(panelAgregar, BorderLayout.NORTH);
@@ -73,11 +83,24 @@ public class EditSolucionDialog extends JDialog {
 	}
 
 	public void cargarLocalidades(ArrayList<LocalidadDto> localidades) {
-		// TODO: Limpiar combos y cargarlos con la lista
+		comboOrigen.removeAllItems();
+		comboDestino.removeAllItems();
+		
+		for (LocalidadDto localidad : localidades) {
+			comboOrigen.addItem(localidad);
+			comboDestino.addItem(localidad);
+		}
 	}
 
 	public void actualizarListaConexiones(ArrayList<ConexionDto> conexiones) {
-		// TODO: Limpiar listModel y cargar las conexiones actuales
+		listModel.clear();
+		for (ConexionDto conexion : conexiones) {
+			listModel.addElement(conexion);
+		}
+	}
+	
+	public void mostrarError(String mensaje) {
+		JOptionPane.showMessageDialog(this, mensaje, "Error de Validación", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public Observable<IEditSolucionListener> obtenerObserver(){

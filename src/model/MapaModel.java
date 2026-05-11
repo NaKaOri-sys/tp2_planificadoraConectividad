@@ -1,9 +1,15 @@
 package model;
 
+
 import java.util.Map;
 
 import events.IMapaObserver;
+import events.IEditSolucionObserver;
 import model.dtos.ConfigurationDto;
+import model.entities.Conexion;
+import model.entities.CostCalculator;
+import model.entities.DistanceCalculator;
+import model.entities.Grafo;
 import model.entities.Localidad;
 import model.interfaces.IGenerarRed;
 import util.Observable;
@@ -13,6 +19,8 @@ public class MapaModel extends Observable<IMapaObserver> {
 	private double recargo;
 	private double costoDifProv;
 	private IGenerarRed generarRed;
+	private Grafo agmActual;
+	private Observable<IEditSolucionObserver> editSolucionObservable = new Observable<>();
 
 	public MapaModel(IGenerarRed generarRed) {
 		this.costoKm = 0.0;
@@ -21,14 +29,7 @@ public class MapaModel extends Observable<IMapaObserver> {
 		this.generarRed = generarRed;
 	}
 
-	// TODO Implementar: Permitir que el usuario modifique la solución
-	// Agregar método para cambiar una conexión por otra y calcular el nuevo costo
-	// Esto incluiría:
-	// - Eliminar una conexión existente del AGM
-	// - Evaluar qué otras conexiones del grafo completo podrían reemplazarla
-	// - Calcular el impacto en el costo total
-	// - Permitir que el usuario acepte o rechace el cambio
-
+	
 	public void setConfiguration(ConfigurationDto dto) {
 		this.costoKm = Double.parseDouble(dto.getCostoKm());
 		if (costoKm <= 0)
@@ -58,8 +59,9 @@ public class MapaModel extends Observable<IMapaObserver> {
 			if (localidades.isEmpty() || localidades.size() < 2)
 				throw new IllegalArgumentException("Debe haber por lo menos 2 localidades cargadas.");
 			setConfiguration(dto);
+			this.agmActual = this.generarRed.generarRed(costoKm, recargo, costoDifProv, localidades);
 			this.notifyObservers(
-					o -> o.onRedCreated(this.generarRed.generarRed(costoKm, recargo, costoDifProv, localidades)));
+					o -> o.onRedCreated(this.agmActual));
 		} catch (NumberFormatException e) {
 			notifyObservers(o -> o.onMapaError("Los campos de costos configurables deben ser números validos"));
 			return;
@@ -69,4 +71,30 @@ public class MapaModel extends Observable<IMapaObserver> {
 		}
 	}
 
+	public void modificarSolucion(Conexion conexionAEliminar, Conexion conexionAAgregar) {
+		if (this.agmActual == null) {
+				return;
+		}
+		this.agmActual = this.generarRed.recalcularRed(conexionAEliminar, conexionAAgregar,this.agmActual);
+		this.notifyObservers(o -> o.onRedCreated(this.agmActual));
+		this.editSolucionObservable.notifyObservers(o -> o.onSolucionModificada(this.agmActual));
+	}
+		
+	public Conexion crearConexion(Localidad origen, Localidad destino) {
+		DistanceCalculator distanceCalculator = new DistanceCalculator();
+		double km = distanceCalculator.calcularDistanciaHaversine(origen, destino);
+			
+		CostCalculator costCalculator = new CostCalculator(this.costoKm, this.recargo, this.costoDifProv);
+		double costoConexion = costCalculator.calcularCosto(origen, destino, km);
+			
+		return new Conexion(origen, destino, costoConexion);
+	}
+		
+	public Grafo getAgmActual() {
+		return this.agmActual;
+	}
+	
+	public void addEditSolucionObserver(IEditSolucionObserver observer) {
+		this.editSolucionObservable.addObserver(observer);
+	}
 }

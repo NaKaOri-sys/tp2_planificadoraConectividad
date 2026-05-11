@@ -60,6 +60,33 @@ public class Grafo {
 		vecinos.get(conexion.getDestino()).add(conexion.getOrigen());
 		this.conexionesUnicas.add(conexion);
 	}
+	
+	public void eliminarConexion(Conexion conexion) {
+		if(conexion == null) {
+			return;
+		}
+		Localidad origen = conexion.getOrigen();
+		Localidad destino = conexion.getDestino();
+		
+		if (!sonVecinos(origen, destino)) {
+			return; // La conexión no existe, no se puede eliminar
+		}
+		this.conexionesUnicas.remove(conexion);
+		
+		if(this.mapaDeRedes.containsKey(origen)) {
+			this.mapaDeRedes.get(origen).remove(conexion);
+		}
+		if(this.mapaDeRedes.containsKey(destino)) {
+			this.mapaDeRedes.get(destino).remove(conexion);
+		}
+		
+		if(this.vecinos.containsKey(origen)) {
+			this.vecinos.get(origen).remove(destino);
+		}
+		if(this.vecinos.containsKey(destino)) {
+			this.vecinos.get(destino).remove(origen);
+		}
+	}
 
 	public List<Conexion> getConexiones(Localidad localidad) {
 		if (!mapaDeRedes.containsKey(localidad))
