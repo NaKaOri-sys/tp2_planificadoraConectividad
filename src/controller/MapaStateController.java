@@ -18,6 +18,7 @@ public class MapaStateController implements IMapaObserver {
 
 	@Override
 	public void onRedCreated(Grafo red) {
+		this.view.limpiarConexiones();
 		LocalidadDto dto = red.getLocalidades().getFirst().toDto();
 		this.view.resaltarPrimerVertice(dto);
 		red.getTodasLasConexiones().forEach((conexion) -> {

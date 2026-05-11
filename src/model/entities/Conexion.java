@@ -2,6 +2,8 @@ package model.entities;
 
 import java.util.Objects;
 
+import model.dtos.ConexionDto;
+
 public class Conexion {
 	private Localidad origen;
 	private Localidad destino;
@@ -59,5 +61,8 @@ public class Conexion {
 				&& Objects.equals(destino, other.destino) && Objects.equals(origen, other.origen);
 	}
 	
+	public ConexionDto toDto() {
+		return new ConexionDto(origen.getNombre(), destino.getNombre(), costo);
+	}
 	
 }

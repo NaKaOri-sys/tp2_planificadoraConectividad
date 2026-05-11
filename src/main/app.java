@@ -1,6 +1,8 @@
 package main;
 
 
+import controller.EditSolucionController;
+import controller.EditSolucionDialogFacade;
 import controller.LocalidadController;
 import controller.LocalidadDialogFacade;
 import controller.LocalidadIntegrationController;
@@ -35,12 +37,14 @@ public class app {
 		LocalidadModel localidadModel = new LocalidadModel(repository);
 		
 		LocalidadDialogFacade localidadFacade = new LocalidadDialogFacade(localidadDialog, localidadModel);
+		EditSolucionDialogFacade editSolucionFacade = new EditSolucionDialogFacade(editSolucionDialog, mapaModel, localidadModel.getLocalidades());
 		
 		// Controllers
 		new MapaStateController(mapaModel, mapaView);
-		new MapEventController(mapaModel, mapaView, localidadFacade, localidadModel.getLocalidades(), localidadModel, editSolucionDialog); //TODO estaria bueno crear un facade para editSolucion como ya se hizo para localidades
+		new MapEventController(mapaModel, mapaView, localidadFacade, localidadModel.getLocalidades(), localidadModel, editSolucionFacade);
 		new LocalidadIntegrationController(localidadModel, mapaView);
 		new LocalidadController(localidadDialog, localidadModel);
+		new EditSolucionController(editSolucionDialog, mapaModel);
 		
 		mapaView.setVisible(true);
 	}
