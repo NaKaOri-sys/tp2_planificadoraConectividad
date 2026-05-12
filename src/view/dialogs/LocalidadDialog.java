@@ -98,7 +98,6 @@ public class LocalidadDialog extends JDialog {
 				okButton.addActionListener(e -> {
 					LocalidadDto localidadDto = getLocalidadFromInput();
 					observable.notifyObservers(observer -> observer.onInputLocalidad(localidadDto));
-					dispose();
 				});
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);

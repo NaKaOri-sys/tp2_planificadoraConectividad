@@ -68,6 +68,7 @@ public class LocalidadDialogController implements ILocalidadListener {
 					localidadDto.getLongitud());
 			this.localidadModel.agregarLocalidad(localidadDto.getNombre(), localidadDto.getProvincia(),
 					coordenadas.getLatitud(), coordenadas.getLongitud());
+			this.localidadDialog.dispose();
 		} catch (Exception e) {
 			this.localidadDialog.mostrarError(e.getMessage());
 		}

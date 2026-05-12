@@ -23,6 +23,8 @@ public class LocalidadIntegrationController implements ILocalidadObserver{
 	        view.actualizarLocalidades(localidades.keySet());
 	        view.limpiarMapa();
 	        dibujarLocalidadesEnMapa(localidades);
+	        this.view.actualizarTotal(0.00);
+	        this.view.limpiarConexiones();
 	    }
 	    
 	    @Override
