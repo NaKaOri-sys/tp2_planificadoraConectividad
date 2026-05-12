@@ -12,12 +12,12 @@ import view.dialogs.EditSolucionDialog;
 import model.dtos.ConexionDto;
 import model.dtos.LocalidadDto;
 
-public class EditSolucionDialogFacade implements IEditSolucionListener {
+public class EditSolucionDialogController implements IEditSolucionListener {
 	private EditSolucionDialog editSolucionDialog;
 	private MapaModel mapaModel;
 	private Map<String, Localidad> localidades;
 
-	public EditSolucionDialogFacade(EditSolucionDialog editSolucionDialog, MapaModel mapaModel,
+	public EditSolucionDialogController(EditSolucionDialog editSolucionDialog, MapaModel mapaModel,
 			Map<String, Localidad> localidades) {
 		this.editSolucionDialog = editSolucionDialog;
 		this.mapaModel = mapaModel;

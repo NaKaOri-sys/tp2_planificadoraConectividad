@@ -7,16 +7,11 @@ import model.entities.CoordinateValidator;
 import model.entities.Localidad;
 import view.dialogs.LocalidadDialog;
 
-/**
- * Facade que gestiona la interacción entre LocalidadDialog, MapEventController
- * y LocalidadModel. Centraliza la lógica de agregar, actualizar y eliminar
- * localidades.
- */
-public class LocalidadDialogFacade implements ILocalidadListener {
+public class LocalidadDialogController implements ILocalidadListener {
 	private LocalidadDialog localidadDialog;
 	private LocalidadModel localidadModel;
 
-	public LocalidadDialogFacade(LocalidadDialog localidadDialog, LocalidadModel localidadModel) {
+	public LocalidadDialogController(LocalidadDialog localidadDialog, LocalidadModel localidadModel) {
 		this.localidadDialog = localidadDialog;
 		this.localidadModel = localidadModel;
 

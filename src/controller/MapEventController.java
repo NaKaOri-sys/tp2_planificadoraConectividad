@@ -17,25 +17,25 @@ import view.MapaView;
 public class MapEventController implements IMapaListener {
 	private MapaModel model;
 	private MapaView view;
-	private LocalidadDialogFacade localidadFacade;
-	private EditSolucionDialogFacade editSolucionFacade;
+	private LocalidadDialogController localidadDialog;
+	private EditSolucionDialogController editSolucionDialog;
 	private Map<String, Localidad> localidades;
 	private LocalidadModel localidadModel;
 
-	public MapEventController(MapaModel model, MapaView view, LocalidadDialogFacade localidadFacade,
-			Map<String, Localidad> localidades, LocalidadModel localidadModel, EditSolucionDialogFacade editSolucionFacade) {
+	public MapEventController(MapaModel model, MapaView view, LocalidadDialogController localidadDialog,
+			Map<String, Localidad> localidades, LocalidadModel localidadModel, EditSolucionDialogController editSolucionDialog) {
 		this.model = model;
 		this.view = view;
-		this.localidadFacade = localidadFacade;
+		this.localidadDialog = localidadDialog;
 		this.localidades = localidades;
 		this.localidadModel = localidadModel;
-		this.editSolucionFacade = editSolucionFacade;
+		this.editSolucionDialog = editSolucionDialog;
 		view.getObservable().addObserver(this);
 	}
 
 	@Override
 	public void onAgregarLocalidad() {
-		this.localidadFacade.mostrar();
+		this.localidadDialog.mostrar();
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class MapEventController implements IMapaListener {
 			this.view.mostrarError("Debe seleccionar al menos una localidad para eliminarla.");
 			return;
 		}
-		this.localidadFacade.eliminar(nombreLocalidad);
+		this.localidadDialog.eliminar(nombreLocalidad);
 	}
 
 	@Override
@@ -78,12 +78,12 @@ public class MapEventController implements IMapaListener {
 			this.view.mostrarError("Debe seleccionar al menos una localidad para actualizar.");
 			return;
 		}
-		this.localidadFacade.mostrarParaEditar(nombreLocalidad);
+		this.localidadDialog.mostrarParaEditar(nombreLocalidad);
 	}
 
 	@Override
 	public void onEditSolucion() {
-		this.editSolucionFacade.mostrar();
+		this.editSolucionDialog.mostrar();
 	}
 
 }

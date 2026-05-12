@@ -2,9 +2,9 @@ package main;
 
 
 import controller.EditSolucionController;
-import controller.EditSolucionDialogFacade;
+import controller.EditSolucionDialogController;
 import controller.LocalidadController;
-import controller.LocalidadDialogFacade;
+import controller.LocalidadDialogController;
 import controller.LocalidadIntegrationController;
 import controller.MapEventController;
 import controller.MapaStateController;
@@ -36,12 +36,12 @@ public class app {
 		ILocalidadRepository repository = new LocalidadRepositoryJson(FILE_PATH);
 		LocalidadModel localidadModel = new LocalidadModel(repository);
 		
-		LocalidadDialogFacade localidadFacade = new LocalidadDialogFacade(localidadDialog, localidadModel);
-		EditSolucionDialogFacade editSolucionFacade = new EditSolucionDialogFacade(editSolucionDialog, mapaModel, localidadModel.getLocalidades());
+		LocalidadDialogController localidad = new LocalidadDialogController(localidadDialog, localidadModel);
+		EditSolucionDialogController editSolucion = new EditSolucionDialogController(editSolucionDialog, mapaModel, localidadModel.getLocalidades());
 		
 		// Controllers
 		new MapaStateController(mapaModel, mapaView);
-		new MapEventController(mapaModel, mapaView, localidadFacade, localidadModel.getLocalidades(), localidadModel, editSolucionFacade);
+		new MapEventController(mapaModel, mapaView, localidad, localidadModel.getLocalidades(), localidadModel, editSolucion);
 		new LocalidadIntegrationController(localidadModel, mapaView);
 		new LocalidadController(localidadDialog, localidadModel);
 		new EditSolucionController(editSolucionDialog, mapaModel);
