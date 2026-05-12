@@ -81,7 +81,7 @@ public class MapaView extends JFrame {
 		panel.add(btnCalcular);
 		
 		btnEditSolucion = new JButton("Editar");
-		btnEditSolucion.setEnabled(false);
+		setDisabledEditButtom();
 		btnEditSolucion.setToolTipText("Permite modificar la solución ofrecida al calcular las conexiones.");
 		btnEditSolucion.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btnEditSolucion.setBounds(159, 459, 111, 42);
@@ -96,6 +96,7 @@ public class MapaView extends JFrame {
 		btnCleanMapa.setBounds(148, 10, 122, 42);
 		btnCleanMapa.addActionListener(a -> {
 			observable.notifyObservers(o -> o.onLimpiarMapa());
+			setDisabledEditButtom();
 		});
 		panel.add(btnCleanMapa);
 
@@ -171,8 +172,7 @@ public class MapaView extends JFrame {
 		btnUpdateLocalidad.addActionListener(a -> {
 			String nombreLocalidad = list.getSelectedValue();
 			observable.notifyObservers(o -> o.onActualizarLocalidad(nombreLocalidad));
-			actualizarTotal(0.00);
-			limpiarConexiones();
+			resetMapState();
 		});
 		panel.add(btnUpdateLocalidad);
 
@@ -182,8 +182,7 @@ public class MapaView extends JFrame {
 		btnDeleteLocalidad.addActionListener(a -> {
 			String nombreLocalidad = list.getSelectedValue();
 				observable.notifyObservers(o -> o.onEliminarLocalidad(nombreLocalidad));
-				actualizarTotal(0.00);
-				limpiarConexiones();
+				resetMapState();
 		});
 		btnDeleteLocalidad.setBounds(162, 324, 85, 42);
 		panel.add(btnDeleteLocalidad);
@@ -202,6 +201,12 @@ public class MapaView extends JFrame {
 		lblConfiguraciones.setFont(new Font("SansSerif", Font.BOLD, 14));
 		lblConfiguraciones.setBounds(36, 70, 176, 22);
 		panel.add(lblConfiguraciones);
+	}
+
+	private void resetMapState() {
+		actualizarTotal(0.00);
+		limpiarConexiones();
+		setDisabledEditButtom();
 	}
 
 	public void hacerFocoEnLocalidadSeleccionada(LocalidadDto dto) {
@@ -247,6 +252,10 @@ public class MapaView extends JFrame {
 
 	public void limpiarConexiones() {
 		mapa.removeAllMapPolygons();
+	}
+	
+	public void setDisabledEditButtom() {
+		btnEditSolucion.setEnabled(false);
 	}
 
 	public void mostrarError(String message) {

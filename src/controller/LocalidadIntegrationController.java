@@ -25,6 +25,7 @@ public class LocalidadIntegrationController implements ILocalidadObserver{
 	        dibujarLocalidadesEnMapa(localidades);
 	        this.view.actualizarTotal(0.00);
 	        this.view.limpiarConexiones();
+	        this.view.setDisabledEditButtom();
 	    }
 	    
 	    @Override
