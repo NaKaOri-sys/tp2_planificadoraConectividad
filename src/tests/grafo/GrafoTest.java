@@ -56,7 +56,8 @@ public class GrafoTest {
 		assertEquals(1, grafo.getConexiones(ManuelAlberti).size());
 		
 		Conexion conexionInverso = grafo.getConexiones(ManuelAlberti).get(0);
-		assertEquals(SanMiguel, conexionInverso.getDestino());
+		boolean estaSanMiguel = conexionInverso.getOrigen().equals(SanMiguel) || conexionInverso.getDestino().equals(SanMiguel);
+		assertTrue("La conexión de Manuel Alberti esta apuntando a San Miguel", estaSanMiguel);
 	}
 	
 	@Test

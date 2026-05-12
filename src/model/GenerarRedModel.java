@@ -290,6 +290,9 @@ public class GenerarRedModel implements IGenerarRed {
 
 	private void initializeClass(double costoKM, double recargo, double costoDifProv,
 			Map<String, Localidad> localidades) {
+		if (localidades == null || localidades.isEmpty()) {
+			throw new IllegalArgumentException("Debe haber localidades para poder generar la red.");
+		}
 		this.grafo = new Grafo();
 		this.costoKm = costoKM;
 		this.recargo = recargo;

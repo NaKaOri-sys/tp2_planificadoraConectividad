@@ -31,12 +31,12 @@ public class Grafo {
 			throw new IllegalArgumentException("Error: La localidad no existe en el grafo.");
 		}
 
-		List<Conexion> conexionesABorrar = mapaDeRedes.get(localidad);
+		List<Conexion> conexionesABorrar = new ArrayList<>(this.mapaDeRedes.get(localidad));
 		for (Conexion conexionesVecinos : conexionesABorrar) {
-			mapaDeRedes.get(conexionesVecinos.getOrigen()).remove(conexionesVecinos);
-			mapaDeRedes.get(conexionesVecinos.getDestino()).remove(conexionesVecinos);
+			eliminarConexion(conexionesVecinos);
 		}
 		mapaDeRedes.remove(localidad);
+		vecinos.remove(localidad);
 	}
 
 	public boolean sonVecinos(Localidad localidad, Localidad vecino) {
