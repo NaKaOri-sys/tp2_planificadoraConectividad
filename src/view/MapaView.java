@@ -47,7 +47,7 @@ public class MapaView extends JFrame {
 
 	public MapaView() {
 		observable = new Observable<>();
-		setTitle("Redimensionador Red");
+		setTitle("OptiFibra");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 600);
 		mapa = new JMapViewer();
